@@ -1,10 +1,5 @@
 <template>
-  <el-drawer
-    title="Setting"
-    :visible.sync="settingShow"
-    >
-
-  </el-drawer>
+  <div id="AppSetting">Setting</div>
 </template>
 
 <script>
@@ -14,21 +9,18 @@ export default {
       
     }
   },
-  computed:{
-    settingShow:{
-      get(){
-        return this.isSetting
-      },
-      set(val){
-        if(!val) this.showSetting(false);
-        console.log(val)
-      }
-    }
-  },
-  props:["isSetting","showSetting"]
+  methods: {
+  }
 }
 </script>
 
 <style>
-
+#AppSetting{
+  min-width: 200px;
+  max-width: 900px;
+  width: 60%;
+  height: 100%;
+  background: #fff;
+  margin: 0 auto;
+}
 </style>

@@ -3,6 +3,8 @@ import ElementUI from 'element-ui'
 import App from './App.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 
+import store from './store/index';
+
 //提示信息不显示
 Vue.config.productionTip = false
 
@@ -12,4 +14,9 @@ Vue.use(ElementUI);
 new Vue({
   //将App组件放入容器中
   render: h => h(App),
+  store: store,
+  //公共总线
+  beforeCreate(){
+    Vue.prototype.$bus = this;
+  }
 }).$mount('#app')
