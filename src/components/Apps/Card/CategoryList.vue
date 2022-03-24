@@ -1,15 +1,12 @@
 <template>
   <div class="cardCategoryList">
       <div class="titleBar">
-        <div class="name">{{name}}</div>
-        <div class="desc">{{description}}</div>
+        <div class="name" :style="`background:${category.color};box-shadow:0 0 0 2rem rgba(0,0,0,0.1) inset`">{{category.name}}</div>
+        <div class="desc">{{category.description}}</div>
         <a href="javascript:;" class="more">更多</a>
       </div>
       <div class="list">
-          <CardItem></CardItem>
-          <CardItem></CardItem>
-          <CardItem></CardItem>
-          <CardItem></CardItem>
+          <CardItem v-for="(card, id) in category.cards" :key="id" :id="id" :card="card" :categoryId="categoryId"></CardItem>
       </div>
   </div>
 </template>
@@ -21,12 +18,16 @@ export default {
         return{
             name: "天文",
             color: "#386ade",
-            description: "记录我的天文之旅"
+            description: "记录我的天文之旅",
         }
     },
     components:{
         CardItem,
-    }
+    },
+    mounted(){
+        console.log(this.categoryId)
+    },
+    props:['category','categoryId']
 }
 </script>
 

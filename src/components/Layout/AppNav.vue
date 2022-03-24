@@ -2,17 +2,19 @@
   <div id="nav">
       <transition-group name="float">
       
-        <div
+        <router-link
+            class="nav-item"
+            :to="`/${item.name}`"
+            active-class="active"
             v-show="showNavItem"
             v-for="item in items"
             :key="item.id"
             :data-index="item.id"
-            @click="changeApp"
             >
                 <el-tooltip placement="left" :content="item.name">
-                    <div class="nav-item"><i :class="item.icon"></i></div>
+                    <i :class="item.icon"></i>
                 </el-tooltip>
-        </div>
+        </router-link>
       </transition-group>
       <button class="nav-button" @click="toggleNav"><i class="iconfont icon-gouwudai"></i></button>
   </div>
@@ -33,9 +35,6 @@ export default {
         toggleNav(){
             this.showNavItem = !this.showNavItem;
         },
-        changeApp(e){
-            this.$bus.$emit("switchPage",e.currentTarget.dataset.index);
-        }
     }
 }
 </script>
@@ -49,6 +48,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 100;
 }
 #nav .nav-button{
     width: 3rem;
@@ -75,6 +75,7 @@ export default {
     font-size: 1.5rem;
 }
 #nav .nav-item{
+    display: block;
     width: 2.6rem;
     height: 2.6rem;
     background: var(--theme-color);
@@ -85,6 +86,11 @@ export default {
     border-radius: 50%;
     box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.2) inset,
                 0 0 0 0.25rem #fff;
+    transition-property: background;
+    transition-duration: 0.3s;
+}
+#nav .nav-item.active{
+    background: var(--theme-color2);
 }
 #nav .nav-item i{
     font-size: 1.2rem;
@@ -102,6 +108,6 @@ export default {
     opacity: 1;
 }
 .float-enter-active,.float-leave-active{
-    transition: 0.3s;
+    transition: 0.3s!important;
 }
 </style>

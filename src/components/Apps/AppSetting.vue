@@ -16,11 +16,11 @@ export default {
 
 <style>
 #AppSetting{
-  min-width: 200px;
-  max-width: 900px;
-  width: 60%;
-  height: 100%;
+  width: 80%;
+  /* height: 100%; */
   background: #fff;
-  margin: 0 auto;
+  margin: 1rem auto;
+  border-radius: 8px;
+  padding: 1rem;
 }
 </style>
