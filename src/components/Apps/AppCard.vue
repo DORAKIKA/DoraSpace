@@ -10,8 +10,8 @@
         class="bannerItem"
         :style="`background:${item.bg}`"
       >
-        <div class="title">{{item.name}}</div>
         <i :class="item.icon"></i>
+        <div class="title">{{item.name}}</div>
       </div>
     </div>
     <router-view></router-view>
@@ -24,9 +24,8 @@
     data() {
       return {
         banners:[
-          {name:"面板",icon:"iconfont icon-cards",bg:"linear-gradient(to right,#358bff,#15c6ff)",target:"/Card/panel"},
           {name:"分类",icon:"iconfont icon-fenlei",bg:"linear-gradient(to right,#f65,#ffbf37)",target:"/Card/category"},
-          {name:"标签",icon:"iconfont icon-biaoqian",bg:"linear-gradient(to right,#18e7ae,#1eebeb)",target:"/Card/tag"},
+          {name:"标签",icon:"iconfont icon-biaoqian",bg:"linear-gradient(to right,#18e7ae,#1eebeb)",target:"/Card/tag?"},
           {name:"漫步",icon:"iconfont icon-huiyuan2",bg:"linear-gradient(to right,#61649f,#8184cf)",target:"/Card/review"},
         ],
         isCollapse: true
@@ -34,25 +33,28 @@
     },
     methods:{
       go(e){
-        this.$router.replace({
-          path: e.currentTarget.dataset.target,
-        })
+        if(this.$router.currentRoute.path !== e.currentTarget.dataset.target){
+          this.$router.replace({
+            path: e.currentTarget.dataset.target,
+          })
+        }
       }
     },
     mounted(){
-      this.$store.dispatch('getCardData');
+      this.$store.dispatch('initCardData',this.$bus);
     }
   }
 </script>
 
 <style>
 #AppCard{
-  width: 80%;
-  height: 100%;
-  /* background: #fff; */
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 2rem;
   transition: 0.3s;
+  width: 100%;
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
 }
 .banner{
   width: 100%;
@@ -65,7 +67,7 @@
   justify-content: space-between;
 }
 .bannerItem{
-  width: calc((100% - 3rem) / 4);
+  width: calc((100% - 2rem) / 3);
   border-radius: 8px;
   background: var(--theme-color);
   color: #fff;
@@ -93,6 +95,7 @@
   height: 4px;
   background: #fff;
   border-radius: 2px;
+  transition: width 0.3s;
 }
 .bannerItem i{
   position: absolute;
@@ -107,12 +110,22 @@
   transform: scale(1.3);
   opacity: 0.7;
 }
+.bannerItem:hover .title::before{
+  width: 4rem;
+}
 @media screen and (max-width:900px){
   #AppCard{
-    width: 85%;
+    padding: 0;
   }
   .bannerItem{
-    width: calc((100% - 1rem) / 2);
+    width: calc(100% / 3);
+    margin: 0;
+    border-radius: 0;
+  }
+}
+@media screen and (max-width:400px) {
+  .bannerItem{
+    width: calc(100%);
   }
 }
 </style>

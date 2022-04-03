@@ -1,29 +1,37 @@
 <template>
-  <div class="cardItem" @click="toCardInfo(id)">
-      <div class="title">{{card.title}}</div>
+  <div class="cardItem" @click="toCardInfo(cid)" :title="cardInfo.title">
+      <div class="title">{{cardInfo.title}}</div>
       <div class="tags">
-          <span v-for="tag in card.tags" :key="tag" class="tagItem">{{tag}}</span>
+          <span v-for="tag in cardInfo.tags" :key="tag" class="tagItem">{{tag}}</span>
       </div>
       <div class="process">
-          <div class="complete" :style="`width:${card.process}%;`"></div>
+          <el-progress :percentage="cardInfo.process"></el-progress>
       </div>
   </div>
 </template>
 
 <script>
 export default {
+    data(){
+        return {
+            cardInfo:{},
+        }
+    },
     methods:{
-        toCardInfo(id){
-            // console.log(target)
+        toCardInfo(cid){
             this.$router.push({
-                path: `/Card/cardInfo?id=${id}&categoryId=${this.categoryId}`,
+                path: `/Card/cardInfo?cid=${cid}`,
             })
+        },
+        initCardInfo(cid){
+            this.cardInfo = this.$store.state.CardInfo.cards[cid]?this.$store.state.CardInfo.cards[cid]:{};
         }
     },
     mounted(){
-        console.log(this.categoryId)
+        this.initCardInfo(this.cid);
+        this.$bus.$on("onCardDataLoad",()=>{this.initCardInfo(this.cid)})
     },
-    props:['id','card','categoryId']
+    props:['cid']
 }
 </script>
 
@@ -32,16 +40,22 @@ export default {
     width: 200px;
     /* height: 150px; */
     padding: 1rem;
-    background: #f1f4f9;
+    background: var(--bg);
     border-radius: 8px;
     margin: 8px;
     transition: 0.3s;
     cursor: pointer;
 }
 .cardItem:hover{
-    box-shadow: 2px 2px 6px #aaa8;
+    box-shadow: 2px 2px 6px #aaa4;
 }
-.tags{
+.cardItem .title{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 1.5rem;
+}
+.carditem .tags{
     padding: 0.3rem 0;
 }
 .tagItem {
@@ -54,9 +68,7 @@ export default {
 }
 .cardItem .process{
     width: 100%;
-    height: 0.5rem;
     border-radius: 0.2rem;
-    background: #aaa;
     overflow: hidden;
 }
 .cardItem .process .complete{

@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 //
 import AppCard from '../components/Apps/AppCard.vue';
 import AppSetting from '../components/Apps/AppSetting.vue';
+import AppPanel from '../components/Apps/AppPanel.vue';
+import AppLink from '../components/Apps/AppLink.vue';
 
 import CardCategory from '../components/Apps/Card/CardCategory.vue'
 import CardPanel from '../components/Apps/Card/CardPanel.vue'
@@ -13,14 +15,17 @@ import CardInfo from '../components/Apps/Card/CardInfo.vue'
 export default new VueRouter({
     routes:[
         {
-            path: '/',
-            component: AppCard,
-            children:[
-                {
-                    path:'',
-                    component: CardPanel
-                }
-            ]
+            path:'/',
+            beforeEnter(to,from,next){
+                // this.$router.replace({
+                //     path: '/Panel',
+                // })
+                next({path:"/Panel"})
+            }
+        },
+        {
+            path: '/Panel',
+            component: AppPanel,
         },
         {
             path:'/Card',
@@ -28,7 +33,7 @@ export default new VueRouter({
             children: [
                 {
                     path: '',
-                    component: CardPanel,
+                    component: CardCategory,
                 },
                 {
                     path: 'panel',
@@ -51,6 +56,10 @@ export default new VueRouter({
                     component: CardInfo,
                 }
             ]
+        },
+        {
+            path: '/Link',
+            component: AppLink,
         },
         {
             path:'/Setting',

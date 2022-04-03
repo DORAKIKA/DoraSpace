@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import ElementUI from 'element-ui'
 import App from './App.vue'
 import 'element-ui/lib/theme-chalk/index.css'
+import mavonEditor from 'mavon-editor';
+import 'mavon-editor/dist/css/index.css';
 
 import store from './store/index';
 
@@ -16,8 +18,9 @@ import router from './router';
 Vue.use(ElementUI);
 Vue.use(Router);
 Vue.use(store)
+Vue.use(mavonEditor);
 
-new Vue({
+const vm = new Vue({
   //将App组件放入容器中
   render: h => h(App),
   store: store,
@@ -27,3 +30,5 @@ new Vue({
     Vue.prototype.$bus = this;
   }
 }).$mount('#app')
+
+vm.$store.$bus = vm.$bus;
