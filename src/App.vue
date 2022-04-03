@@ -32,7 +32,6 @@ export default {
     return {
       username:"",
       password:"",
-      auth: btoa(encodeURIComponent('yangkai2413@163.com:ah3jf5vqyaknidd9').replace(/%([0-9A-F]{2})/g, function(match, p1) {return String.fromCharCode('0x' + p1);})),
     }
   },
   computed:{
@@ -48,16 +47,18 @@ export default {
       let userAuth = btoa(encodeURIComponent(`${this.username}:${this.password}`).replace(/%([0-9A-F]{2})/g, function(match, p1) {return String.fromCharCode('0x' + p1);}));
       localStorage.setItem('userAuth',userAuth)
       this.$store.dispatch('checkLogin',this);
+    },
+    getConfig(){
+      this.$store.dispatch('getConfig',this.$bus);
     }
   },
   mounted() {
     this.$store.dispatch('checkLogin',this);
-    this.$bus.$on('onLogin',()=>{
-      this.$store.dispatch('getConfig',this.$bus);
-    })
+    this.$bus.$on('onLogin',this.getConfig);
 
   },
   beforeDestroy() {
+    this.$bus.$off('onLogin',this.getConfig);
   },
 }
 </script>

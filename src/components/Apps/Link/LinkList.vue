@@ -5,11 +5,11 @@
         </div>
       <div class="link-container">
         <LinkItem
-            v-for="(link,id) in list"
-            :key="id"
+            v-for="link in list"
+            :key="link.id"
             :link="link"
             :listId="listId"
-            :linkId="id"
+            :linkId="link.id"
             :editLink="editLink"
         ></LinkItem>
       </div>

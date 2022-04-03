@@ -99,9 +99,6 @@ export default {
             themeColor:"#386ade",
             isDark:false,
         },
-        auth: btoa(encodeURIComponent('yangkai2413@163.com:ah3jf5vqyaknidd9').replace(/%([0-9A-F]{2})/g, function(match, p1) {return String.fromCharCode('0x' + p1);})),
-        account:"1633198089@qq.com",
-        accountPassword:"ah3jf5vqyaknidd9",
         isLogin: false,
     }
 }

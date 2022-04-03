@@ -29,9 +29,7 @@ export default {
                 $bus.$emit("onCardDataLoad");
                 context.state.isDataGet = true;
             }).catch((error)=>{
-                //log=
                 console.log(error);
-                // context.commit('SetCardData',{num:0,categoryNum:0,tagNum:0,totalProcess:0,categories:{}});
             });
         },
         uploadCardData(context){

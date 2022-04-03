@@ -5,13 +5,21 @@
             <input placeholder="请输入链接Ctrl+Enter或右侧按钮添加链接、或输入内容Enter或左侧按钮进行搜索" v-model="inputContent" @keyup.enter.exact="search" @keyup.ctrl.enter="addLink"/>
             <i @click="addLink" class="el-icon-circle-plus-outline"></i>
         </div>
-        <LinkList
+        <!-- <LinkList
             v-for="(list,name) in LinkInfo.links"
             :key="name"
             :list="list"
             :listId="name"
             :editLink="editLink"
-        ></LinkList>
+        ></LinkList> -->
+        <LinkList
+            v-for="list in sortLinkInfo"
+            :key="list.id"
+            :list="list.links"
+            :listId="list.id"
+            :editLink="editLink"
+        >
+        </LinkList>
         <el-dialog class="editContainer" :title="editData.name" :visible.sync="isEdit" width="300px">
             <el-form :model="editData">
                 <div class="item">
@@ -49,6 +57,33 @@ export default {
             editListId:"",
             editLinkId:"",
             LinkInfo:{},
+        }
+    },
+    computed:{
+        sortLinkInfo(){
+            let res = [];
+            for(let key in this.LinkInfo.links){
+                let list = {};
+                list.id = key;
+                // list.links = this.LinkInfo[key];
+                list.links = []
+                list.clicks = 0;
+                for(let linkId in this.LinkInfo.links[key]){
+                    list.clicks += this.LinkInfo.links[key][linkId].click ? this.LinkInfo.links[key][linkId].click : 0;
+                    list.links.push(this.LinkInfo.links[key][linkId]);
+                }
+                list.links.sort((a,b)=>{
+                    let aClick = a.click?a.click:0;
+                    let bClick = b.click?b.click:0;
+                    return bClick-aClick;
+                })
+                
+                res.push(list);
+            }
+            res.sort((a,b)=>{
+                return b.clicks - a.clicks;
+            });
+            return res;
         }
     },
     methods:{
@@ -110,11 +145,7 @@ export default {
     },
     mounted(){
         this.LinkInfo = this.$store.state.LinkInfo;
-        this.$bus.$on('onLinkDataLoad',()=>{
-            console.log("load")
-            // this.LinkInfo = this.$store.state.LinkInfo;
-        })
-        this.$store.dispatch('getLinkData',this.$bus)
+        this.$store.dispatch('getLinkData');
     }
 }
 </script>

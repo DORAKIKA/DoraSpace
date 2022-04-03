@@ -79,14 +79,17 @@ export default {
     },
     saveSetting(){
       this.$store.dispatch("uploadConfig");
+    },
+    onDataLoad(){
+      this.cardsConfig = this.AppInfo.config.cardsConfig
     }
   },
   mounted(){
     this.cardsConfig = this.AppInfo.config.cardsConfig ? this.AppInfo.config.cardsConfig : {};
-    this.$bus.$on('onDataLoad',()=>{
-      // console.log(this.AppInfo.config)
-      this.cardsConfig = this.AppInfo.config.cardsConfig
-    })
+    this.$bus.$on('onDataLoad',this.onDataLoad)
+  },
+  beforeDestroy(){
+    this.$bus.$off('onDataLoad',this.onDataLoad);
   }
 }
 </script>

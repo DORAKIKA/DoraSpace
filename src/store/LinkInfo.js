@@ -2,7 +2,7 @@ const axios = require("axios").default;
 import Vue from 'vue';
 export default {
     actions:{
-        getLinkData:function(context,$bus){
+        getLinkData:function(context){
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
             var config = {
@@ -14,7 +14,6 @@ export default {
             };
 
             axios(config).then((response)=>{
-                console.log(typeof response.data);
                 let links = response.data;
                 if(typeof response.data === 'string'){
                     links = JSON.parse(links)
@@ -22,7 +21,7 @@ export default {
                     links = response.data;
                 }
                 context.commit('UpdateLinks',links);
-                $bus.$emit('onLinkDataLoad');
+                this.$bus.$emit('onLinkDataLoad');
                 //
             }).catch((error)=>{
                 console.log('无文件？',error);
@@ -85,8 +84,9 @@ export default {
             if(state.links[options.listId][options.linkId].click){
                 state.links[options.listId][options.linkId].click++;
             }else{
-                state.links[options.listId][options.linkId].click = 1;
+                Vue.set(state.links[options.listId][options.linkId],'click', 1);
             }
+            this.dispatch('uploadLinkData');
         }
     },
     state:{
