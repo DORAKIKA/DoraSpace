@@ -1,10 +1,12 @@
 import VueRouter from "vue-router";
 
 //
+import AppLogin from '../components/Apps/AppLogin.vue';
 import AppCard from '../components/Apps/AppCard.vue';
 import AppSetting from '../components/Apps/AppSetting.vue';
 import AppPanel from '../components/Apps/AppPanel.vue';
 import AppLink from '../components/Apps/AppLink.vue';
+import AppDiary from '../components/Apps/AppDiary.vue';
 
 import CardCategory from '../components/Apps/Card/CardCategory.vue'
 import CardPanel from '../components/Apps/Card/CardPanel.vue'
@@ -17,11 +19,13 @@ export default new VueRouter({
         {
             path:'/',
             beforeEnter(to,from,next){
-                // this.$router.replace({
-                //     path: '/Panel',
-                // })
                 next({path:"/Panel"})
             }
+        },
+        {
+            path: '/Login',
+            component: AppLogin,
+            
         },
         {
             path: '/Panel',
@@ -60,6 +64,10 @@ export default new VueRouter({
         {
             path: '/Link',
             component: AppLink,
+        },
+        {
+            path: '/Diary',
+            component: AppDiary,
         },
         {
             path:'/Setting',

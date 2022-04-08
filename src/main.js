@@ -5,6 +5,7 @@ import App from './App.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 import mavonEditor from 'mavon-editor';
 import 'mavon-editor/dist/css/index.css';
+import {VueJsonp} from 'vue-jsonp';
 
 import store from './store/index';
 
@@ -19,6 +20,7 @@ Vue.use(ElementUI);
 Vue.use(Router);
 Vue.use(store)
 Vue.use(mavonEditor);
+Vue.use(VueJsonp);
 
 const vm = new Vue({
   //将App组件放入容器中

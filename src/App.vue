@@ -2,19 +2,11 @@
   <div id="app" :data-theme="AppInfo.config.isDark?'dark':'light'" :style="`--theme-color:${AppInfo.config.themeColor}`">
     <el-container>
       <AppNav></AppNav>
-      <el-main v-if="AppInfo.isLogin">
+      <el-main>
           <transition name="float">
             <router-view></router-view>
           </transition>
-          <AppFooter></AppFooter>
       </el-main>
-      <div id="login" v-else>
-        <div class="loginBox">
-          <input type="text" v-model="username">
-          <input type="password" v-model="password">
-          <el-button @click="userLogin">登录</el-button>
-        </div>
-      </div>
     </el-container>
 
   </div>
@@ -22,7 +14,6 @@
 
 <script>
 import AppNav from './components/Layout/AppNav.vue'
-import AppFooter from './components/Layout/AppFooter.vue';
 import {mapState} from 'vuex';
 import 'animate.css'
 
@@ -30,8 +21,6 @@ export default {
   name: 'App',
   data() {
     return {
-      username:"",
-      password:"",
     }
   },
   computed:{
@@ -39,23 +28,45 @@ export default {
   },
   components: {
     AppNav,
-    AppFooter,
   },
   methods: {
-    userLogin(){
-      //setLocalStorge
-      let userAuth = btoa(encodeURIComponent(`${this.username}:${this.password}`).replace(/%([0-9A-F]{2})/g, function(match, p1) {return String.fromCharCode('0x' + p1);}));
-      localStorage.setItem('userAuth',userAuth)
-      this.$store.dispatch('checkLogin',this);
-    },
     getConfig(){
       this.$store.dispatch('getConfig',this.$bus);
+    },
+    go(url){
+        if(this.$router.currentRoute.path !== url){
+          this.$router.replace({
+            path: url,
+          })
+        }
+    },
+    changePage(e){
+      if(e.altKey){
+        if(this.AppInfo.navItems[e.keyCode-49]){
+          this.go(this.AppInfo.navItems[e.keyCode-49].link);
+          return false;
+        }
+        // switch(e.keyCode){
+        //   case 49:
+        //     this.go('/Panel');
+        //     return false;
+        //   case 50:
+        //     this.go('/Card');
+        //     return false;
+        //   case 51:
+        //     this.go('/Link');
+        //     return false;
+        //   case 52:
+        //     this.go('/Setting');
+        //     return false;
+        // }
+      }
     }
   },
   mounted() {
     this.$store.dispatch('checkLogin',this);
     this.$bus.$on('onLogin',this.getConfig);
-
+    window.addEventListener('keydown',this.changePage)
   },
   beforeDestroy() {
     this.$bus.$off('onLogin',this.getConfig);
@@ -79,7 +90,7 @@ a{
   --theme-light-color: #e7eeff;
   --bg: #edf4ff;
   --card-white: #fff;
-  --card-inner: #eee;
+  --card-inner: #f1f4f9;
   --font-color: #333;
 
   --over90: rgba(255,255,255,0.9);
@@ -128,6 +139,14 @@ html,body{
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif,"微软雅黑";
 }
+.icon{
+  width: 2rem;
+  height: 2rem;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

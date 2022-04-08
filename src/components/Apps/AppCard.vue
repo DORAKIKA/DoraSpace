@@ -38,9 +38,17 @@
             path: e.currentTarget.dataset.target,
           })
         }
+      },
+      checkLogin(){
+        if(!this.$store.state.AppInfo.isLogin){
+          this.$router.replace({
+            path: '/Login',
+          })
+        }
       }
     },
     mounted(){
+      this.checkLogin();
       this.$store.dispatch('initCardData',this.$bus);
     }
   }

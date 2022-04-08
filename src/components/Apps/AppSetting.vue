@@ -2,94 +2,52 @@
   <form id="AppSetting">
       <div class="title"><div class="text">Setting</div><el-button @click="saveSetting" type="primary">保存</el-button></div>
       <div class="container1">
-        <div class="group-name">用户设置</div>
-        <div class="group">
-          <div class="item">
-            <div class="key">账号</div>
-            <div class="value"><el-input v-model="AppInfo.account"></el-input></div>
-          </div>
-          <div class="item">
-            <div class="key">密钥</div>
-            <div class="value"><el-input v-model="AppInfo.accountPassword" showPassword></el-input></div>
-          </div>
-          <!-- 主题色 -->
-          <div class="item">
-            <div class="key">主题色</div>
-            <div class="value">
-              <div class="themeColor">
-                <button 
-                  v-for="color in themeColors"
-                  :key="color"
-                  @click.prevent="changeThemeColor(color)" 
-                  :class="AppInfo.config.themeColor===color?'checked':''"
-                  :style="`background:${color}`">
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- 夜间切换 -->
-          <div class="item">
-            <div class="key">夜间模式</div>
-            <div class="value">
-              <el-switch
-                v-model="AppInfo.config.isDark"
-                active-color="var(--theme-color)"
-                inactive-color="var(--theme-color)">
-              </el-switch>
-            </div>
-          </div>
-        </div>
+        <MainSetting></MainSetting>
+        <PanelSetting></PanelSetting>
       </div>
       <div class="container2">
-        <div class="group-name">card设置</div>
-        <div class="group">
-          <!-- 分类展开？ -->
-          <div class="item">
-            <div class="key">分类是否默认展开</div>
-            <div class="value">
-              <el-switch
-                v-model="cardsConfig.categoryExtended"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-              </el-switch>
-            </div>
-          </div>
-        </div>
+        <CardSetting></CardSetting>
+        <LinkSetting></LinkSetting>
       </div>
   </form>
 </template>
 
 <script>
 import {mapState} from 'vuex';
+import MainSetting from './Setting/MainSetting.vue';
+import CardSetting from './Setting/CardSetting.vue';
+import PanelSetting from './Setting/PanelSetting.vue';
+import LinkSetting from './Setting/LinkSetting.vue';
 export default {
   data() {
     return {
       value: true,
       settings:{},
-      themeColors:["#386ade","#ff6755","#61649f","#18e7ae"],
-      cardsConfig:{},
     }
   },
   computed:{
       ...mapState(['AppInfo'])
   },
+  components:{
+    MainSetting,
+    PanelSetting,
+    CardSetting,
+    LinkSetting,
+  },
   methods: {
-    changeThemeColor(value){
-      this.AppInfo.config.themeColor = value;
-    },
     saveSetting(){
       this.$store.dispatch("uploadConfig");
     },
-    onDataLoad(){
-      this.cardsConfig = this.AppInfo.config.cardsConfig
+    checkLogin(){
+      if(!this.$store.state.AppInfo.isLogin){
+        this.$router.replace({
+          path: '/Login',
+        })
+      }
     }
   },
   mounted(){
-    this.cardsConfig = this.AppInfo.config.cardsConfig ? this.AppInfo.config.cardsConfig : {};
-    this.$bus.$on('onDataLoad',this.onDataLoad)
-  },
-  beforeDestroy(){
-    this.$bus.$off('onDataLoad',this.onDataLoad);
+    this.checkLogin();
   }
 }
 </script>
@@ -153,6 +111,10 @@ export default {
   display: flex;
   line-height: 2rem;
   margin: 0.2rem 0;
+}
+#AppSetting .group .item.disabled{
+  color: #999;
+  cursor: not-allowed;
 }
 #AppSetting .group .item .value{
   width: 50%;

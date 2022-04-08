@@ -37,17 +37,19 @@ export default {
 
 <style>
 .cardItem{
-    width: 200px;
+    width: calc((100% - 5rem) / 5);
     /* height: 150px; */
     padding: 1rem;
-    background: var(--bg);
+    background: var(--card-inner);
     border-radius: 8px;
-    margin: 8px;
+    margin: 0.5rem;
     transition: 0.3s;
     cursor: pointer;
+    border: 2px solid transparent;
 }
 .cardItem:hover{
-    box-shadow: 2px 2px 6px #aaa4;
+    /* background: var(--theme-color); */
+    border: 2px solid var(--theme-color);
 }
 .cardItem .title{
     text-overflow: ellipsis;
@@ -75,5 +77,20 @@ export default {
     width: 50%;
     height: 100%;
     background: var(--theme-color);
+}
+@media screen and (max-width:1200px) {
+    .cardItem{
+        width: calc((100% - 4rem) / 4);
+    }
+}
+@media screen and (max-width:900px) {
+    .cardItem{
+        width: calc((100% - 3rem) / 3);
+    }
+}
+@media screen and (max-width:600px) {
+    .cardItem{
+        width: calc((100% - 2rem) / 2);
+    }
 }
 </style>

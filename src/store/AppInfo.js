@@ -1,4 +1,5 @@
 const axios = require("axios").default;
+const http = require('../http/index').default;
 
 export default {
     actions:{
@@ -8,7 +9,7 @@ export default {
            
             var config = {
                 method: 'put',
-                url: `http://localhost:8080/jianguo/DoraSpace/checkLogin.data`,
+                url: `${context.state.origin}/jianguo/DoraSpace/checkLogin.data`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
@@ -23,6 +24,11 @@ export default {
                         message: '登录成功',
                         type: 'success'
                     });
+                    if(app.$router.currentRoute.path !== '/Panel'){
+                        app.$router.replace({
+                            path: '/Panel',
+                        })
+                    }
                     app.$bus.$emit('onLogin');
                 }else if(response.data.status === 0){
                     context.state.isLogin = false;
@@ -32,6 +38,11 @@ export default {
                         message: '用户名或密码错误！',
                         type: 'error'
                     });
+                    if(app.$router.currentRoute.path !== '/Login'){
+                        app.$router.replace({
+                            path: '/Login',
+                        })
+                    }
                     console.log("登录失败",response.data.data);
                 }
             }).catch(function (error) {
@@ -42,21 +53,39 @@ export default {
         getConfig(context,$bus){
             if(!context.state.isLogin) return;
             let userAuth = localStorage.getItem('userAuth')
-
-            var config = {
-                method: 'get',
-                url: 'http://localhost:8080/jianguo/DoraSpace/config.json',
-                headers: { 
+            http.get(`${context.state.origin}/jianguo/DoraSpace/config.json`,{
+                headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
-            };
-            
-            axios(config).then((response)=>{
-                context.commit('UpdateConfig',response.data);
+            }).then(res=>{
+                context.commit('UpdateConfig',res.data);
                 $bus.$emit('onDataLoad');
-            }).catch((error)=>{
-                console.log(error);
+            },error=>{
+                if(error.status === 404){
+                    http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/config.json')
+                    .then((res)=>{
+                        context.commit('UpdateConfig',res.data);
+                        $bus.$emit('onDataLoad');
+                    })
+                }
             });
+
+            // var config = {
+            //     method: 'get',
+            //     url: 'http://localhost:8080/jianguo/DoraSpace/config.json',
+            //     headers: { 
+            //         'Authorization': `Basic ${userAuth}`
+            //     }
+            // };
+            
+            // axios(config).then((response)=>{
+            // },(error)=>{
+            //     if(error.response.status === 404){
+            //         console.log("404");
+            //     }
+            // }).catch((error)=>{
+            //     console.log(error);
+            // });
         },
         uploadConfig(context){
             context.dispatch("uploadJianGuoAppFile",{url:"/DoraSpace/config.json",data:context.state.config});
@@ -67,7 +96,7 @@ export default {
             var data = JSON.stringify(options.data);
             var config = {
                 method: 'put',
-                url: `http://localhost:8080/jianguo${options.url}`,
+                url: `${context.state.origin}/jianguo${options.url}`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
@@ -75,17 +104,18 @@ export default {
                 data : data
             };
             axios(config).then(function (response) {
-                console.log("upload file success")
                 console.log(JSON.stringify(response.data));
             }).catch(function (error) {
-                console.log("upload file fail")
                 console.log(error);
             });
         },
     },
     mutations:{
         UpdateConfig(state,value){
-            state.config = value;
+            state.config = {
+                ...state.config,
+                ...value,
+            };
         },
         GetAuth(state){
             return state.auth;
@@ -98,7 +128,29 @@ export default {
         config:{
             themeColor:"#386ade",
             isDark:false,
+            Panel:{
+                showBilibiliHot: true,
+                showWeiboHot: false,
+                showZhihuHot: false,
+                showHitokoto: true,
+            },
+            Card:{
+                categoryExtend: true,
+            },
+            Link:{
+                showLinkChart: true,
+                chartLimit: 10,
+                showNav: true,
+            }
         },
         isLogin: false,
+        origin: window.location.origin,
+        navItems:[
+            {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel'},
+            {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card'},
+            {id:'AppLink',name:'Link',icon:'iconfont icon-link',link:'/Link'},
+            {id:'AppDiary',name:"Diary",icon:'iconfont icon-rili',link:'/Diary'},
+            {id:'AppSetting',name:'Setting',icon:'iconfont icon-shezhi',link:'/Setting'},
+        ],
     }
 }

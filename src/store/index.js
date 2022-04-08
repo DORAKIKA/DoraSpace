@@ -6,7 +6,7 @@ Vue.use(Vuex);
 import CardInfo from './CardInfo';
 import LinkInfo from './LinkInfo';
 import AppInfo from './AppInfo';
-
+import DiaryInfo from './DiaryInfo';
 
 
 
@@ -15,6 +15,7 @@ export default new Vuex.Store({
     modules:{
         AppInfo,
         CardInfo,
-        LinkInfo
+        LinkInfo,
+        DiaryInfo
     }
 });

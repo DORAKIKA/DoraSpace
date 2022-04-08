@@ -7,8 +7,6 @@ module.exports = defineConfig({
         name:"delete401",
         path:"/jianguo/DoraSpace/checkLogin.data",
         middleware:async(req,res)=>{
-          res.setHeader('test','atest');
-          //
           let auth = req.get('Authorization');
           var axios = require('axios');
           var data = JSON.stringify({});
@@ -46,6 +44,14 @@ module.exports = defineConfig({
           '^/jianguo': ''
         },
       },
+      '/bilibili':{
+        target: 'https://api.bilibili.com/',
+        ws:true,
+        changeOrigin:true,
+        pathRewrite:{
+          '^/bilibili': ''
+        },
+      }
     }
   }
 })

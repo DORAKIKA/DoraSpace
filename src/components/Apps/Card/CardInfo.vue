@@ -140,7 +140,6 @@ export default {
         },
         formChange(){
             this.isChange=true;
-            console.log("change")
         }
     },
     mounted(){
@@ -148,13 +147,24 @@ export default {
         this.initCardInfo(this.cid);
         this.$bus.$on('onCardDataLoad',()=>{
             this.initCardInfo(this.cid);
-            console.log("emit")
         })
     }
 }
 </script>
 
 <style>
+#AppCard{
+    max-height: calc(100% + 21rem);
+}
+#AppCard #cardInfo{
+    max-height: calc(100% - 9rem);
+}
+#AppCard #cardInfo .content{
+    max-height: calc(100% - 12rem);
+}
+#AppCard #cardInfo .content .markdown-body{
+    max-height: 100%;
+}
 #cardInfo .header,#cardInfo .meta,#cardInfo .content{
     padding: 1rem;
     background: var(--card-white);

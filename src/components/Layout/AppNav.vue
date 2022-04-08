@@ -1,9 +1,10 @@
 <template>
   <div id="nav">
     <el-tooltip
+        :effect="$store.state.AppInfo.config.isDark?'light':'dark'"
         placement="left"
         :content="item.name"
-        v-for="item in items"
+        v-for="item in this.$store.state.AppInfo.navItems"
         :key="item.id"
     >
         <router-link
@@ -31,6 +32,7 @@ export default {
                 {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel'},
                 {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card'},
                 {id:'AppLink',name:'Link',icon:'iconfont icon-link',link:'/Link'},
+                {id:'AppDiary',name:"Diary",icon:'iconfont icon-rili',link:'/Diary'},
                 {id:'AppSetting',name:'Setting',icon:'iconfont icon-shezhi',link:'/Setting'},
             ],
         }
@@ -53,6 +55,7 @@ export default {
     align-items: center;
     z-index: 100;
     background: var(--card-white);
+    border-right: 1px solid var(--bg);
     overflow: scroll;
 }
 #nav::-webkit-scrollbar{
@@ -63,7 +66,7 @@ export default {
     display: block;
     width: 3rem;
     height: 3rem;
-    margin: 1rem 0;
+    margin: 1rem 0 0;
     color: var(--font-color);
     line-height: 3rem;
     text-align: center;
@@ -72,6 +75,7 @@ export default {
 }
 #nav .nav-item:hover{
     color: var(--theme-color);
+    background: var(--card-inner);
 }
 #nav .nav-item.router-link-exact-active,
 #nav .nav-item.active{
@@ -87,7 +91,10 @@ export default {
       width: 100%;
       justify-content: space-around;
       flex-direction: row;
-      border-bottom: 1px solid var(--bg);
+      border-top: 1px solid var(--bg);
+  }
+  #nav .nav-item{
+      margin: 0.5rem;
   }
 }
 

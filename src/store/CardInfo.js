@@ -1,4 +1,5 @@
 const axios = require("axios").default;
+const http = require("../http/index").default;
 import Vue from 'vue'
 
 export default {
@@ -7,29 +8,43 @@ export default {
             // 获取信息，拆分
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
-            var config = {
-                method: 'get',
-                url: 'http://localhost:8080/jianguo/DoraSpace/cardsInfo.json',
-                headers: { 
+
+            
+            http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/cardsInfo.json`,{
+                headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
-            };
-
-            axios(config).then((response)=>{
-                console.log(typeof response.data);
+            }).then(res=>{
+                console.log(typeof res.data);
                 let cardsInfo;
-                if(typeof response.data === 'string'){
-                    cardsInfo = JSON.parse(response.data)
-                }else if(typeof response.data === 'object'){
-                    cardsInfo = response.data;
+                if(typeof res.data === 'string'){
+                    cardsInfo = JSON.parse(res.data)
+                }else if(typeof res.data === 'object'){
+                    cardsInfo = res.data;
                 }
                 context.commit("SetCardCategories",cardsInfo.categories);
                 context.commit("SetCardTags",cardsInfo.tags);
                 context.commit("SetCardCardsData",cardsInfo.cards);
                 $bus.$emit("onCardDataLoad");
                 context.state.isDataGet = true;
-            }).catch((error)=>{
-                console.log(error);
+            },error=>{
+                if(error.status === 404){
+                    http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/cardsInfo.json')
+                    .then((res)=>{
+                        console.log(typeof res.data);
+                        let cardsInfo;
+                        if(typeof res.data === 'string'){
+                            cardsInfo = JSON.parse(res.data)
+                        }else if(typeof res.data === 'object'){
+                            cardsInfo = res.data;
+                        }
+                        context.commit("SetCardCategories",cardsInfo.categories);
+                        context.commit("SetCardTags",cardsInfo.tags);
+                        context.commit("SetCardCardsData",cardsInfo.cards);
+                        $bus.$emit("onCardDataLoad");
+                        context.state.isDataGet = true;
+                    })
+                }
             });
         },
         uploadCardData(context){
@@ -48,14 +63,14 @@ export default {
             var data = JSON.stringify(options.data);
             var config = {
                 method: 'put',
-                url: `http://localhost:8080/jianguo${options.url}`,
+                url: `${this.state.AppInfo.origin}/jianguo${options.url}`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
                 },
                 data : data
             };
-            axios(config).then(function (response) {
+            axios(config).then((response)=>{
                 console.log("upload file success")
                 console.log(JSON.stringify(response.data));
                 this.$bus.$emit("onCardDataLoad");
@@ -112,7 +127,7 @@ export default {
             let obCards = state.categories[state.cards[value.cid].category].cards
             for(let i = 0; i < obCards.length; i++){
                 if(obCards[i] === value.cid){
-                    obCards.splice(i);
+                    obCards.splice(i,1);
                     break;
                 }
             }
@@ -124,7 +139,7 @@ export default {
             state.cards[value.cid].tags.forEach(tag => {
                 for(let i = 0; i < state.tags[tag].length;i++){
                     if(state.tags[tag][i] === value.cid){
-                        state.tags[tag].splice(i);
+                        state.tags[tag].splice(i,1);
                         break;
                     }
                 }
@@ -147,7 +162,7 @@ export default {
             let obCards = state.categories[state.cards[value.cid].category].cards
             for(let i = 0; i < obCards.length; i++){
                 if(obCards[i] === value.cid){
-                    obCards.splice(i);
+                    obCards.splice(i,1);
                     break;
                 }
             }
@@ -155,7 +170,7 @@ export default {
             state.cards[value.cid].tags.forEach(tag => {
                 for(let i = 0; i < state.tags[tag].length;i++){
                     if(state.tags[tag][i] === value.cid){
-                        state.tags[tag].splice(i);
+                        state.tags[tag].splice(i,1);
                         break;
                     }
                 }

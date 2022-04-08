@@ -1,8 +1,8 @@
 <template>
   <div class="link-list">
-      <div class="list-name ">
+    <div class="list-name " :id="`list-${listId}`">
           {{listId}}
-        </div>
+    </div>
       <div class="link-container">
         <LinkItem
             v-for="link in list"
@@ -58,14 +58,19 @@ props:['list','listId','editLink']
 }
 
 
-@media screen and (max-width:900px) {
+@media screen and (max-width:1200px) {
     .link-item{
         width: calc((100% - 3rem) / 3);
     }
 }
-@media screen and (max-width:600px) {
+@media screen and (max-width:900px) {
     .link-item{
         width: calc((100% - 2rem) / 2);
+    }
+}
+@media screen and (max-width:600px) {
+    .link-item{
+        width: 100%;
     }
 }
 </style>

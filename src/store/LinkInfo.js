@@ -1,40 +1,58 @@
 const axios = require("axios").default;
+const http = require("../http/index").default;
 import Vue from 'vue';
 export default {
     actions:{
         getLinkData:function(context){
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
-            var config = {
-                method: 'get',
-                url: 'http://localhost:8080/jianguo/DoraSpace/linkInfo.json',
-                headers: { 
+            // var config = {
+            //     method: 'get',
+            //     url: 'http://localhost:8080/jianguo/DoraSpace/linkInfo.json',
+            //     headers: { 
+            //         'Authorization': `Basic ${userAuth}`
+            //     }
+            // };
+
+            http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/linkInfo.json`,{
+                headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
-            };
-
-            axios(config).then((response)=>{
-                let links = response.data;
-                if(typeof response.data === 'string'){
-                    links = JSON.parse(links)
-                }else if(typeof response.data === 'object'){
-                    links = response.data;
+            }).then(res=>{
+                    let links = res.data;
+                    if(typeof res.data === 'string'){
+                        links = JSON.parse(links)
+                    }else if(typeof res.data === 'object'){
+                        links = res.data;
+                    }
+                    context.commit('UpdateLinks',links);
+                    this.$bus.$emit('onLinkDataLoad');
+            },error=>{
+                if(error.status === 404){
+                    http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/linkInfo.json')
+                    .then((res)=>{
+                
+                        let links = res.data;
+                        if(typeof res.data === 'string'){
+                            links = JSON.parse(links)
+                        }else if(typeof res.data === 'object'){
+                            links = res.data;
+                        }
+                        context.commit('UpdateLinks',links);
+                        this.$bus.$emit('onLinkDataLoad');
+                        console.log(typeof res.data);
+                    })
                 }
-                context.commit('UpdateLinks',links);
-                this.$bus.$emit('onLinkDataLoad');
-                //
-            }).catch((error)=>{
-                console.log('无文件？',error);
             });
+
         },
         uploadLinkData(context){
-            console.log("upload");
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
             var data = JSON.stringify(context.state.links);
             var config = {
                 method: 'put',
-                url: `http://localhost:8080/jianguo/DoraSpace/linkInfo.json`,
+                url: `${this.state.AppInfo.origin}/jianguo/DoraSpace/linkInfo.json`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'

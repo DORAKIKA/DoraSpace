@@ -1,5 +1,5 @@
 <template>
-    <div><div class="linkClickPanel" id="eCharts-linkClick"></div></div>
+    <div class="linkClickPanel" id="eCharts-linkClick"></div>
 </template>
 
 <script>
@@ -12,28 +12,40 @@ data(){
     }
 },
 computed:{
-    ...mapState(['LinkInfo'])
+    ...mapState(['LinkInfo','AppInfo'])
 },
 methods:{
     drawChart(data){
         let dom = document.getElementById('eCharts-linkClick');
+        console.log("draw")
         if(this.linkChart===null){
             this.linkChart = echarts.init(dom);
-        }else{
-            // this.linkChart = this.linkChart
         }
         this.linkChart.setOption({
             title: {
                 text: '访问统计',
-                left: 'center',
-                top: 'center'
+                left: '16',
+                top: '16'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '40',
+                left: 'center'
             },
             series: [
                 {
-                type: 'pie',
-                data: data,
-                radius:['40%',"70%"]
-                // roseType:'area',
+                    type: 'pie',
+                    data: data,
+                    center:['50%','60%'],
+                    radius:['20%',"50%"],
+                    // roseType:'area',
+                    itemStyle: {
+                        borderRadius: 6,
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    },
                 }
             ]
         });
@@ -54,7 +66,7 @@ methods:{
         links.sort((a,b)=>{
             return b.value - a.value;
         });
-        this.drawChart(links.splice(0,10));
+        this.drawChart(links.splice(0,this.AppInfo.config.Link.chartLimit));
         return null;
     }
 
@@ -74,12 +86,7 @@ beforeDestroy(){
 
 <style>
 #eCharts-linkClick{
-    width:100%;
-    height: 300px;
-}
-@media screen and (max-width:600px){
-    #eCharts-linkClick{
-        /* transform: scale(0.5) */
-    }
+    width:100px;
+    height: 400px;
 }
 </style>
