@@ -1,24 +1,68 @@
-// const axios = require("axios").default;
-// const http = require("../http/index").default;
+const axios = require("axios").default;
+const http = require("../http/index").default;
 // import Vue from 'vue';
 export default {
     actions:{
         addDiary(context,value){
             context.commit('AddDiary',value);
+        },
+        getDiaryData(context){
+            if(!this.state.AppInfo.isLogin) return;
+            let userAuth = localStorage.getItem('userAuth');
+
+            http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/diaryInfo.json`,{
+                headers:{
+                    'Authorization': `Basic ${userAuth}`
+                }
+            }).then(
+                (res)=>{
+                    console.log(res);
+                    context.commit('SetDiaries',res.data);
+                },
+                (error)=>{
+                    if(error.status === 404){
+                        http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/diaryInfo.json')
+                        .then((res)=>{
+                            console.log(res)
+                            context.commit('SetDiaries',res.data);
+                            this.$bus.$emit('onDiaryDataLoad');
+                        })
+                    }
+                }
+            )
+        },
+        uploadDiaryData(context){
+            if(!this.state.AppInfo.isLogin) return;
+            let userAuth = localStorage.getItem('userAuth');
+            var data = JSON.stringify(context.state.diaries);
+            var config = {
+                method: 'put',
+                url: `${this.state.AppInfo.origin}/jianguo/DoraSpace/diaryInfo.json`,
+                headers: { 
+                    'Authorization': `Basic ${userAuth}`, 
+                    'Content-Type': 'application/json'
+                },
+                data : data
+            };
+            axios(config).then(function (response) {
+                console.log(JSON.stringify(response.data));
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     },
     mutations:{
         AddDiary(state,value){
-            state.diaries.push(value)
+            state.diaries.push(value);
+            this.dispatch('uploadDiaryData');
+        },
+        SetDiaries(state,value){
+            state.diaries = value;
         }
     },
     state:{
         diaries:[
-            {mood: '1',date:'2022/04/01 20:01',content:'愚人节快乐！'},
-            {mood: '2',date:'2022/04/03 20:01',content:'热起来了啊！'},
-            {mood: '3',date:'2022/04/06 20:01',content:'加油，继续写博客'},
-            {mood: '4',date:'2022/04/07 20:01',content:'累死了！'},
-            {mood: '5',date:'2022/04/08 20:01',content:'今天天气真好！'},
+            {mood: '😁',date:'2022/04/01 20:01',content:'欢迎使用DoraSpace！'},
         ]
     }
 }

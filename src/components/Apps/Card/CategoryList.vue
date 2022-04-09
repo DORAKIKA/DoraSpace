@@ -61,7 +61,7 @@ export default {
     mounted(){
         console.log(this.categoryId);
         this.category = this.$store.state.CardInfo.categories?this.$store.state.CardInfo.categories[this.bid]:{};
-        this.isExtended = this.$store.state.AppInfo.config.cardsConfig?this.$store.state.AppInfo.config.cardsConfig.categoryExtended:true;
+        this.isExtended = this.$store.state.AppInfo.config.Card?this.$store.state.AppInfo.config.Card.categoryExtended:true;
         this.$bus.$on("onCardDataLoad",()=>{
             this.category = this.$store.state.CardInfo.categories[this.bid];
             this.isExtended = this.$store.state.AppInfo.config.cardsConfig.categoryExtended;

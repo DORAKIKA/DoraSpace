@@ -67,6 +67,8 @@ export default {
     this.$store.dispatch('checkLogin',this);
     this.$bus.$on('onLogin',this.getConfig);
     window.addEventListener('keydown',this.changePage)
+
+    this.getConfig();
   },
   beforeDestroy() {
     this.$bus.$off('onLogin',this.getConfig);
@@ -91,6 +93,7 @@ a{
   --bg: #edf4ff;
   --card-white: #fff;
   --card-inner: #f1f4f9;
+  --card-shadow: #999999;
   --font-color: #333;
 
   --over90: rgba(255,255,255,0.9);
@@ -108,6 +111,7 @@ a{
   --bg: #222226;
   --card-white: #333;
   --card-inner: #444;
+  --card-shadow: #111111;
   --font-color: #eee;
 
   --over90: rgba(51,51,51,0.9);

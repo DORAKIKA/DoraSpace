@@ -2,7 +2,7 @@
   <div id="AppPanel">
     <div class="panelMain">
       <Hitokoto v-if="AppInfo.config.Panel.showHitokoto" class="mainItem"></Hitokoto>
-      <LinkClickPanel class="mainItem item50"></LinkClickPanel>
+      <LinkClickPanel v-if="AppInfo.config.Link.showLinkChart" class="mainItem item50"></LinkClickPanel>
     </div>
     <div class="panelAside">
       <BilibiliHot v-if="AppInfo.config.Panel.showBilibiliHot" class="asideItem"></BilibiliHot>
@@ -32,17 +32,13 @@ export default {
     ZhihuHot,
   },
   methods:{
-    checkLogin(){
-      if(!this.$store.state.AppInfo.isLogin){
-        this.$router.replace({
-          path: '/Login',
-        })
-      }
+    onLogin(){
+      this.$store.dispatch('getLinkData');
     }
   },
   mounted(){
-    this.checkLogin();
-    this.$store.dispatch('getLinkData');
+    this.onLogin();
+    this.$bus.$on('onLogin',this.onLogin);
   }
 }
 </script>
@@ -79,7 +75,11 @@ export default {
 
 #AppPanel .mainItem,
 #AppPanel .asideItem{
-  box-shadow: 4px 4px 8px var(--card-inner);
+  box-shadow: 1px 1px 3px var(--card-shadow);
+}
+#AppPanel .mainItem:hover,
+#AppPanel .asideItem:hover{
+  box-shadow: 3px 3px 8px var(--card-shadow);
 }
 
 #AppPanel .mainItem.item50{

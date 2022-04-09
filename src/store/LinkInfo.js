@@ -6,13 +6,6 @@ export default {
         getLinkData:function(context){
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
-            // var config = {
-            //     method: 'get',
-            //     url: 'http://localhost:8080/jianguo/DoraSpace/linkInfo.json',
-            //     headers: { 
-            //         'Authorization': `Basic ${userAuth}`
-            //     }
-            // };
 
             http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/linkInfo.json`,{
                 headers:{
@@ -40,7 +33,6 @@ export default {
                         }
                         context.commit('UpdateLinks',links);
                         this.$bus.$emit('onLinkDataLoad');
-                        console.log(typeof res.data);
                     })
                 }
             });

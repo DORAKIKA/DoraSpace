@@ -45,11 +45,16 @@
             path: '/Login',
           })
         }
+      },
+      onLogin(){
+        this.$store.dispatch('initCardData',this.$bus);
       }
     },
     mounted(){
-      this.checkLogin();
-      this.$store.dispatch('initCardData',this.$bus);
+      // this.checkLogin();
+      this.onLogin();
+      this.$bus.$on('onLogin',this.onLogin);
+      console.log(333)
     }
   }
 </script>

@@ -8,7 +8,7 @@ import { mapState } from 'vuex';
 export default {
 data(){
     return{
-        linkChart:null,
+        linkChart:'',
     }
 },
 computed:{
@@ -17,8 +17,7 @@ computed:{
 methods:{
     drawChart(data){
         let dom = document.getElementById('eCharts-linkClick');
-        console.log("draw")
-        if(this.linkChart===null){
+        if(!this.linkChart){
             this.linkChart = echarts.init(dom);
         }
         this.linkChart.setOption({
@@ -66,7 +65,8 @@ methods:{
         links.sort((a,b)=>{
             return b.value - a.value;
         });
-        this.drawChart(links.splice(0,this.AppInfo.config.Link.chartLimit));
+        let drawLinks = links.splice(0,this.AppInfo.config.Link.chartLimit);
+        this.drawChart(drawLinks);
         return null;
     }
 

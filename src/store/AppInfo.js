@@ -24,7 +24,7 @@ export default {
                         message: '登录成功',
                         type: 'success'
                     });
-                    if(app.$router.currentRoute.path !== '/Panel'){
+                    if(app.$router.currentRoute.path === '/Login' || app.$router.currentRoute.path === ''){
                         app.$router.replace({
                             path: '/Panel',
                         })
@@ -135,7 +135,7 @@ export default {
                 showHitokoto: true,
             },
             Card:{
-                categoryExtend: true,
+                categoryExtended: true,
             },
             Link:{
                 showLinkChart: true,

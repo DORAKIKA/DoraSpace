@@ -16,12 +16,12 @@ import CardInfo from '../components/Apps/Card/CardInfo.vue'
 
 export default new VueRouter({
     routes:[
-        {
-            path:'/',
-            beforeEnter(to,from,next){
-                next({path:"/Panel"})
-            }
-        },
+        // {
+        //     path:'/',
+        //     beforeEnter(to,from,next){
+        //         next({path:"/Panel"})
+        //     }
+        // },
         {
             path: '/Login',
             component: AppLogin,
