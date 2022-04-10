@@ -10,7 +10,7 @@ export default {
             var config = {
                 method: 'put',
                 // url: `${context.state.origin}/jianguo/DoraSpace/checkLogin.data`,
-                url: 'http://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol',
+                url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
