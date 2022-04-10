@@ -10,25 +10,12 @@ export default {
             let userAuth = localStorage.getItem('userAuth');
 
             
-            http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/cardsInfo.json`,{
+            http.get(`http://api.dorakika.cn/jianguoyun?target=DoraSpace/cardsInfo.json`,{
                 headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
             }).then(res=>{
-                console.log(typeof res.data);
-                let cardsInfo;
-                if(typeof res.data === 'string'){
-                    cardsInfo = JSON.parse(res.data)
-                }else if(typeof res.data === 'object'){
-                    cardsInfo = res.data;
-                }
-                context.commit("SetCardCategories",cardsInfo.categories);
-                context.commit("SetCardTags",cardsInfo.tags);
-                context.commit("SetCardCardsData",cardsInfo.cards);
-                $bus.$emit("onCardDataLoad");
-                context.state.isDataGet = true;
-            },error=>{
-                if(error.status === 404){
+                if(res.data.code === 404){
                     http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/cardsInfo.json')
                     .then((res)=>{
                         console.log(typeof res.data);
@@ -44,12 +31,26 @@ export default {
                         $bus.$emit("onCardDataLoad");
                         context.state.isDataGet = true;
                     })
+                }else if (res.data.code){
+                    let cardsInfo;
+                    if(typeof res.data === 'string'){
+                        cardsInfo = JSON.parse(res.data.data)
+                    }else if(typeof res.data === 'object'){
+                        cardsInfo = res.data.data;
+                    }
+                    context.commit("SetCardCategories",cardsInfo.categories);
+                    context.commit("SetCardTags",cardsInfo.tags);
+                    context.commit("SetCardCardsData",cardsInfo.cards);
+                    $bus.$emit("onCardDataLoad");
+                    context.state.isDataGet = true;
                 }
+            },error=>{
+                console.log(error)
             });
         },
         uploadCardData(context){
             context.dispatch("uploadJianGuoFile",{
-                url: "/DoraSpace/cardsInfo.json",
+                url: "DoraSpace/cardsInfo.json",
                 data: {
                     categories: context.state.categories,
                     tags: context.state.tags,
@@ -63,7 +64,7 @@ export default {
             var data = JSON.stringify(options.data);
             var config = {
                 method: 'put',
-                url: `${this.state.AppInfo.origin}/jianguo${options.url}`,
+                url: `http://api.dorakika.cn/jianguoyun?target=${options.url}`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'

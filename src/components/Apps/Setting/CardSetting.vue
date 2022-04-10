@@ -30,12 +30,12 @@ export default {
     },
     methods:{
         onDataLoad(){
-            this.cardsConfig = this.AppInfo.config.cardsConfig
+            this.cardsConfig = this.AppInfo.config.Card
             console.log("hello")
         }
     },
     mounted(){
-        this.cardsConfig = this.AppInfo.config.cardsConfig ? this.AppInfo.config.cardsConfig : {};
+        this.onDataLoad();
         this.$bus.$on('onDataLoad',this.onDataLoad)
     },
     beforeDestroy(){

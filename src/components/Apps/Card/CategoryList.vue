@@ -1,5 +1,5 @@
 <template>
-  <div class="cardCategoryList" :class="{extended:!isExtended}">
+  <div class="cardCategoryList" :class="{fold:isFold}">
       <div class="titleBar">
         <div class="name">{{category.name}}</div>
         <div class="desc">{{category.desc}}</div>
@@ -23,12 +23,12 @@ export default {
             color: "#386ade",
             description: "这是一个分类描述",
             category:{},
-            isExtended: true,
+            isFold: true,
         }
     },
     methods:{
         toggleExtended(){
-            this.isExtended = !this.isExtended;
+            this.isFold = !this.isFold;
         },
         addCard(bid){
             console.log(bid);
@@ -59,12 +59,12 @@ export default {
         CardItem,
     },
     mounted(){
-        console.log(this.categoryId);
         this.category = this.$store.state.CardInfo.categories?this.$store.state.CardInfo.categories[this.bid]:{};
-        this.isExtended = this.$store.state.AppInfo.config.Card?this.$store.state.AppInfo.config.Card.categoryExtended:true;
+        this.isFold = this.$store.state.AppInfo.config.Card?!this.$store.state.AppInfo.config.Card.categoryExtended:true;
+        console.log(this.$store.state.AppInfo.config.Card)
         this.$bus.$on("onCardDataLoad",()=>{
             this.category = this.$store.state.CardInfo.categories[this.bid];
-            this.isExtended = this.$store.state.AppInfo.config.cardsConfig.categoryExtended;
+            this.isExtended = this.$store.state.AppInfo.config.Card.categoryExtended;
         });
         
     },
@@ -81,11 +81,11 @@ export default {
     margin-top: 1rem;
     transition: 0.3s;
 }
-.extended{
+.fold{
     height: 4rem;
     overflow: hidden;
 }
-.extended .el-icon-arrow-down{
+.fold .el-icon-arrow-down{
     transform: rotate(90deg);
     color: greenyellow;
 }

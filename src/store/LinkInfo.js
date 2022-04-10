@@ -7,21 +7,12 @@ export default {
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
 
-            http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/linkInfo.json`,{
+            http.get(`http://api.dorakika.cn/jianguoyun?target=DoraSpace/linkInfo.json`,{
                 headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
             }).then(res=>{
-                    let links = res.data;
-                    if(typeof res.data === 'string'){
-                        links = JSON.parse(links)
-                    }else if(typeof res.data === 'object'){
-                        links = res.data;
-                    }
-                    context.commit('UpdateLinks',links);
-                    this.$bus.$emit('onLinkDataLoad');
-            },error=>{
-                if(error.status === 404){
+                if(res.data.code === 404){
                     http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/linkInfo.json')
                     .then((res)=>{
                 
@@ -34,7 +25,18 @@ export default {
                         context.commit('UpdateLinks',links);
                         this.$bus.$emit('onLinkDataLoad');
                     })
+                }else if(res.data.code){
+                    let links = res.data.data;
+                    if(typeof res.data === 'string'){
+                        links = JSON.parse(links)
+                    }else if(typeof res.data.data === 'object'){
+                        links = res.data.data;
+                    }
+                    context.commit('UpdateLinks',links);
+                    this.$bus.$emit('onLinkDataLoad');
                 }
+            },error=>{
+                console.log(error);
             });
 
         },
@@ -44,7 +46,7 @@ export default {
             var data = JSON.stringify(context.state.links);
             var config = {
                 method: 'put',
-                url: `${this.state.AppInfo.origin}/jianguo/DoraSpace/linkInfo.json`,
+                url: `http://api.dorakika.cn/jianguoyun?target=DoraSpace/linkInfo.json`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'

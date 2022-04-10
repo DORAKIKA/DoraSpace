@@ -8,8 +8,8 @@
                 </div>
                 <div class="container">
                     <div class="time">{{diary.date}}</div>
-                    <div class="content">{{diary.content}}</div>
                     <div class="mood">{{diary.mood}}</div>
+                    <div class="content">{{diary.content}}</div>
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@ export default {
     overflow: scroll;
 }
 #AppDiary .diaryContainer{
-    padding: 1rem;
+    padding: 2rem 1rem;
     width: calc(60% - 1rem);
     background: var(--card-white);
     border-radius: 8px;
@@ -147,6 +147,8 @@ export default {
     margin: 0.5rem;
     padding: 0.5rem;
     width: 3rem;
+    height: 2.5rem;
+    line-height: 1.5rem;
     text-align: center;
     background: var(--card-inner);
     border-radius: 8px;

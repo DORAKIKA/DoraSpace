@@ -9,7 +9,8 @@ export default {
            
             var config = {
                 method: 'put',
-                url: `${context.state.origin}/jianguo/DoraSpace/checkLogin.data`,
+                // url: `${context.state.origin}/jianguo/DoraSpace/checkLogin.data`,
+                url: 'http://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol',
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
@@ -24,7 +25,7 @@ export default {
                         message: '登录成功',
                         type: 'success'
                     });
-                    if(app.$router.currentRoute.path === '/Login' || app.$router.currentRoute.path === ''){
+                    if(app.$router.currentRoute.path === '/Login' || app.$router.currentRoute.path === '/'){
                         app.$router.replace({
                             path: '/Panel',
                         })
@@ -53,42 +54,28 @@ export default {
         getConfig(context,$bus){
             if(!context.state.isLogin) return;
             let userAuth = localStorage.getItem('userAuth')
-            http.get(`${context.state.origin}/jianguo/DoraSpace/config.json`,{
+            // http.get(`${context.state.origin}/jianguo/DoraSpace/config.json`,{
+            http.get('http://api.dorakika.cn/jianguoyun?target=DoraSpace/config.json',{
                 headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
             }).then(res=>{
-                context.commit('UpdateConfig',res.data);
-                $bus.$emit('onDataLoad');
-            },error=>{
-                if(error.status === 404){
+                if(res.data.code===404){
                     http.get('https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/config.json')
                     .then((res)=>{
                         context.commit('UpdateConfig',res.data);
                         $bus.$emit('onDataLoad');
                     })
+                }else if(res.data.code){
+                    context.commit('UpdateConfig',res.data.data);
+                    $bus.$emit('onDataLoad');
                 }
+            },error=>{
+                console.log(error)
             });
-
-            // var config = {
-            //     method: 'get',
-            //     url: 'http://localhost:8080/jianguo/DoraSpace/config.json',
-            //     headers: { 
-            //         'Authorization': `Basic ${userAuth}`
-            //     }
-            // };
-            
-            // axios(config).then((response)=>{
-            // },(error)=>{
-            //     if(error.response.status === 404){
-            //         console.log("404");
-            //     }
-            // }).catch((error)=>{
-            //     console.log(error);
-            // });
         },
         uploadConfig(context){
-            context.dispatch("uploadJianGuoAppFile",{url:"/DoraSpace/config.json",data:context.state.config});
+            context.dispatch("uploadJianGuoAppFile",{url:"DoraSpace/config.json",data:context.state.config});
         },
         uploadJianGuoAppFile(context,options){
             if(!context.state.isLogin) return;
@@ -96,7 +83,7 @@ export default {
             var data = JSON.stringify(options.data);
             var config = {
                 method: 'put',
-                url: `${context.state.origin}/jianguo${options.url}`,
+                url: `http://api.dorakika.cn/jianguoyun?target=${options.url}`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'

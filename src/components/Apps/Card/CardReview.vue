@@ -41,24 +41,26 @@
     </div>
 
     <div class="cardRead">
-      <h1 class="title">{{card.title}}</h1>
-      <div class="category">{{category.name}}</div>
-      <div class="tags">
-        <span class="tag" v-for="tag in card.tags" :key="tag">#{{tag}}</span>
+      <div class="meta">
+        <h1 class="title">{{card.title}}</h1>
+        <div class="category">{{category.name}}</div>
+        <div class="tags">
+          <span class="tag" v-for="tag in card.tags" :key="tag">#{{tag}}</span>
+        </div>
       </div>
       
-            <mavon-editor
-                v-model="card.content"
-                toolbarsBackground="var(--bg)"
-                :subfield="false"
-                defaultOpen="preview"
-                previewBackground="var(--card-white)"
-                :boxShadow="false"
-                :editable="false"
-                codeStyle="monokai"
-                :toolbars="{fullscreen:true,readmodel:true,navigation:true,subfield:true,preview:true}"
-                :navigation="false"
-            ></mavon-editor>
+      <mavon-editor
+          v-model="card.content"
+          toolbarsBackground="var(--bg)"
+          :subfield="false"
+          defaultOpen="preview"
+          previewBackground="var(--card-white)"
+          :boxShadow="false"
+          :editable="false"
+          codeStyle="monokai"
+          :toolbars="{fullscreen:true,readmodel:true,navigation:true,subfield:true,preview:true}"
+          :navigation="false"
+      ></mavon-editor>
     </div>
 
 
@@ -176,6 +178,7 @@ export default {
   border-radius: 8px;
   margin-top: 1rem;
   display: flex;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -185,6 +188,12 @@ export default {
   border-radius: 8px;
   margin-top: 1rem;
   text-align: right;
+}
+
+#CardReview .meta{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #CardReview .category{

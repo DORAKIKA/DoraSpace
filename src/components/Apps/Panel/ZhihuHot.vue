@@ -18,10 +18,6 @@ data(){
 },
 methods:{
     refresh(){
-        // this.$jsonp('https://www.coderutil.com/api/resou/v1/zhihu.jsonp?access-key=957a46300ff3575a8bd72ad2fd215037&secret-key=5d6902d5d0ae8a82cc8a6cacd77a2844')
-        // .then((res)=>{
-        //     this.data = res;
-        // })
         http.get('https://yuanxiapi.cn/api/ZhihuHotsearch/').then(
             (res)=>{
                 this.data = res.data.data;

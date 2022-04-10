@@ -122,6 +122,10 @@ export default {
   max-width: calc(100% - 4rem);
   text-align: right;
 }
+#AppSetting .group .value .el-button{
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+}
 #AppSetting .group .el-input{
   width: 100%;
 }

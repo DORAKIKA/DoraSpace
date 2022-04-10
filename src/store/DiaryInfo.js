@@ -10,14 +10,17 @@ export default {
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
 
-            http.get(`${this.state.AppInfo.origin}/jianguo/DoraSpace/diaryInfo.json`,{
+            http.get(`http://api.dorakika.cn/jianguoyun?target=DoraSpace/diaryInfo.json`,{
                 headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
             }).then(
                 (res)=>{
-                    console.log(res);
-                    context.commit('SetDiaries',res.data);
+                    if(res.data.code === 404){
+                        console.log(res);
+                    }else if(res.data.code){
+                        context.commit('SetDiaries',res.data.data);
+                    }
                 },
                 (error)=>{
                     if(error.status === 404){
@@ -37,7 +40,7 @@ export default {
             var data = JSON.stringify(context.state.diaries);
             var config = {
                 method: 'put',
-                url: `${this.state.AppInfo.origin}/jianguo/DoraSpace/diaryInfo.json`,
+                url: `http://api.dorakika.cn/jianguoyun?target=DoraSpace/diaryInfo.json`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'

@@ -13,6 +13,7 @@
 </template>
 
 <script>
+const http = require('../../../http/index').default;
 export default {
 data(){
     return{
@@ -21,10 +22,14 @@ data(){
 },
 methods:{
     refresh(){
-        this.$jsonp('https://www.coderutil.com/api/resou/v1/weibo.jsonp?access-key=957a46300ff3575a8bd72ad2fd215037&secret-key=5d6902d5d0ae8a82cc8a6cacd77a2844&size=10')
-        .then((res)=>{
-            this.data = res;
-        })
+        http.get('http://api.dorakika.cn/weibo/hot').then(
+            (res)=>{
+                this.data = res.data.data;
+            },
+            (error)=>{
+                console.log(error)
+            }
+        )
     }
 },
 mounted(){

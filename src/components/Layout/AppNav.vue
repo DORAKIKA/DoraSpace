@@ -64,7 +64,7 @@ export default {
 }
 #nav .nav-item{
     display: block;
-    width: 3rem;
+    min-width: 3rem;
     height: 3rem;
     margin: 1rem 0 0;
     color: var(--font-color);
@@ -89,7 +89,7 @@ export default {
 @media screen and (max-width:900px) {
   #nav{
       width: 100%;
-      justify-content: space-around;
+      justify-content: flex-start;
       flex-direction: row;
       border-top: 1px solid var(--bg);
   }

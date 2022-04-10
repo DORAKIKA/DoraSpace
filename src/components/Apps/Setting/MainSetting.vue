@@ -4,11 +4,7 @@
     <div class="group">
         <div class="item">
         <div class="key">账号</div>
-        <div class="value"><el-input v-model="AppInfo.account"></el-input></div>
-        </div>
-        <div class="item">
-        <div class="key">密钥</div>
-        <div class="value"><el-input v-model="AppInfo.accountPassword" showPassword></el-input></div>
+        <div class="value"><el-button @click="goLogin" type="danger" plain>更换账号</el-button></div>
         </div>
         <!-- 主题色 -->
         <div class="item">
@@ -56,6 +52,11 @@ export default {
         changeThemeColor(value){
             this.AppInfo.config.themeColor = value;
         },
+        goLogin(){
+            this.$router.replace({
+                path: '/Login',
+            })
+        }
     }
 }
 </script>
