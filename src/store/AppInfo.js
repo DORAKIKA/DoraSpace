@@ -55,7 +55,7 @@ export default {
             if(!context.state.isLogin) return;
             let userAuth = localStorage.getItem('userAuth')
             // http.get(`${context.state.origin}/jianguo/DoraSpace/config.json`,{
-            http.get('http://api.dorakika.cn/jianguoyun?target=DoraSpace/config.json',{
+            http.get(`${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/config.json`,{
                 headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
@@ -83,7 +83,7 @@ export default {
             var data = JSON.stringify(options.data);
             var config = {
                 method: 'put',
-                url: `http://api.dorakika.cn/jianguoyun?target=${options.url}`,
+                url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=${options.url}`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
@@ -131,7 +131,7 @@ export default {
             }
         },
         isLogin: false,
-        origin: window.location.origin,
+        https: window.location.origin[4]==='s'?'https':'http',
         navItems:[
             {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel'},
             {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card'},

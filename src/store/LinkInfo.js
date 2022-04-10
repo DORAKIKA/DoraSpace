@@ -7,7 +7,7 @@ export default {
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
 
-            http.get(`http://api.dorakika.cn/jianguoyun?target=DoraSpace/linkInfo.json`,{
+            http.get(`${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/linkInfo.json`,{
                 headers:{
                     'Authorization': `Basic ${userAuth}`
                 }
@@ -46,7 +46,7 @@ export default {
             var data = JSON.stringify(context.state.links);
             var config = {
                 method: 'put',
-                url: `http://api.dorakika.cn/jianguoyun?target=DoraSpace/linkInfo.json`,
+                url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/linkInfo.json`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
