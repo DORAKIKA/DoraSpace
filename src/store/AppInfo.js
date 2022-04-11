@@ -132,6 +132,7 @@ export default {
         },
         isLogin: false,
         https: window.location.origin[4]==='s'?'https':'http',
+        origin: window.location.origin,
         navItems:[
             {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel'},
             {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card'},

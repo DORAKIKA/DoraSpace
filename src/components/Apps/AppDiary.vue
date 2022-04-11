@@ -8,7 +8,7 @@
                 </div>
                 <div class="container">
                     <div class="time">{{diary.date}}</div>
-                    <div class="mood">{{diary.mood}}</div>
+                    <div class="mood" @click="deleteDiary(diary.date)">{{diary.mood}}</div>
                     <div class="content">{{diary.content}}</div>
                 </div>
             </div>
@@ -30,7 +30,7 @@ export default {
         return {
             inputMood:"",
             inputContent:"",
-            emojis:['😁','🥰','😑','🙄','😪','🤒','🤢','🥳','😕','😭','😞','😡','🤡']
+            // emojis:['😁','🥰','😑','🙄','😪','🤒','🤢','🥳','😕','😭','😞','😡','🤡']
         }
     },
     computed:{
@@ -41,6 +41,9 @@ export default {
                 formatDiaries.push(this.DiaryInfo.diaries[i]);
             }
             return formatDiaries;
+        },
+        emojis(){
+            return this.DiaryInfo.emojis.split(',');
         }
     },
     methods:{
@@ -63,9 +66,36 @@ export default {
         },
         onLogin(){
             this.$store.dispatch('getDiaryData');
+        },
+        checkLogin(){
+            if(!this.$store.state.AppInfo.isLogin){
+                this.$router.replace({
+                path: '/Login',
+                })
+            }
+        },
+        deleteDiary(date){
+            this.$confirm('是否删除此条日记', '提示', {
+                confirmButtonText: '删除',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$store.dispatch('deleteDiary',date);
+                this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch((err) => {
+                console.log(err)
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     },
     mounted(){
+        this.checkLogin();
         this.$bus.$on('onLogin',this.onLogin);
         this.onLogin();
     }
@@ -152,8 +182,26 @@ export default {
     text-align: center;
     background: var(--card-inner);
     border-radius: 8px;
+    position: relative;
+}#AppDiary .diaryContainer .timeLineItem .container .mood::before{
+    content:'❌';
+    display: block;
+    position: absolute;
+    width: 3rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    top: 0;
+    left: 0;
+    border-radius: 8px;
+    opacity: 0;
+    transition: 0.3s;
 }
-
+#AppDiary .diaryContainer .timeLineItem .container .mood:hover::before{
+    opacity: 1;
+    background: #f20;
+    cursor: pointer;
+}
 #AppDiary .diaryEditor{
     width: 40%;
     padding: 1rem;

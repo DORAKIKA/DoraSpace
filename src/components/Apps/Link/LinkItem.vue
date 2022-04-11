@@ -7,7 +7,6 @@
             </div>
             <div class="content">
                 <div class="name">{{link.name}}</div>
-                <div class="desc">{{link.desc}}</div>
             </div>
         </a>
         <div @click="editLink(listId,linkId)" class="edit iconfont icon-xiugai"></div>

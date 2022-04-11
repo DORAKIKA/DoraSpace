@@ -63,14 +63,14 @@ props:['list','listId','editLink']
         width: calc((100% - 3rem) / 3);
     }
 }
-@media screen and (max-width:900px) {
+@media screen and (max-width:600px) {
     .link-item{
         width: calc((100% - 2rem) / 2);
     }
 }
-@media screen and (max-width:600px) {
+/* @media screen and (max-width:600px) {
     .link-item{
         width: 100%;
     }
-}
+} */
 </style>

@@ -8,6 +8,7 @@
       <div class="container2">
         <CardSetting></CardSetting>
         <LinkSetting></LinkSetting>
+        <DiaryInfo></DiaryInfo>
       </div>
   </form>
 </template>
@@ -18,6 +19,7 @@ import MainSetting from './Setting/MainSetting.vue';
 import CardSetting from './Setting/CardSetting.vue';
 import PanelSetting from './Setting/PanelSetting.vue';
 import LinkSetting from './Setting/LinkSetting.vue';
+import DiaryInfo from './Setting/DiarySetting.vue';
 export default {
   data() {
     return {
@@ -33,6 +35,7 @@ export default {
     PanelSetting,
     CardSetting,
     LinkSetting,
+    DiaryInfo,
   },
   methods: {
     saveSetting(){

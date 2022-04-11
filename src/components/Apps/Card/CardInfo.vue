@@ -1,6 +1,11 @@
 <template>
     <div id="cardInfo">
         <div class="left" v-show="isCidGet">
+            <div class="header">
+                <el-button plain type="info" class="back" @click="back">back</el-button>
+                <el-button :disabled="!isChange" type="success" @click="saveCard">保存</el-button>
+                <el-button type="danger" @click="deleteCard">删除</el-button>
+            </div>
             <div class="meta">
                 <div class="metaItem title"><span class="key">标题</span><el-input @change="formChange" class="value" v-model="cardInfo.title"></el-input></div>
                 <div class="metaItem desc"><span class="key">描述</span><el-input @change="formChange" class="value" v-model="cardInfo.description"></el-input></div>
@@ -16,18 +21,9 @@
                         </el-option>
                     </el-select>
                 </div>
-                <div class="metaItem process">
-                    <span class="key">进度</span>
-                    <div class="value"><el-progress :percentage="cardInfo.process"></el-progress></div>
-                </div>
             </div>
         </div>
         <div class="right">
-            <div class="header">
-                <el-button plain type="info" class="back" @click="back">back</el-button>
-                <el-button :disabled="!isChange" type="success" @click="saveCard">保存</el-button>
-                <el-button type="danger" @click="deleteCard">删除</el-button>
-            </div>
             <div class="tags">
                 <span class="key">标签</span>
                 <span class="value">
@@ -190,7 +186,6 @@ export default {
     padding: 1rem;
     background: var(--card-white);
     border-radius: 8px;
-    margin-top: 1rem;
 }
 
 .el-tag {

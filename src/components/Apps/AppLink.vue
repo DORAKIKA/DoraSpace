@@ -44,10 +44,6 @@
                     <el-input v-model="editData.name" placeholder="标题"></el-input>
                 </div>
                 <div class="item">
-                    <div class="key">描述</div> 
-                    <el-input v-model="editData.desc" placeholder="描述"></el-input>
-                </div>
-                <div class="item">
                     <div class="key">链接</div> 
                     <el-input v-model="editData.linkTo" placeholder="链接"></el-input>
                 </div>
@@ -155,7 +151,6 @@ export default {
                     id:linkId,
                     listName:listId,
                     name:inputArr[1]?inputArr[1]:inputArr[0],
-                    desc:"",
                     icon:"",
                     linkTo:this.inputContent,
                     click:0

@@ -46,22 +46,9 @@ export default {
           this.go(this.AppInfo.navItems[e.keyCode-49].link);
           return false;
         }
-        // switch(e.keyCode){
-        //   case 49:
-        //     this.go('/Panel');
-        //     return false;
-        //   case 50:
-        //     this.go('/Card');
-        //     return false;
-        //   case 51:
-        //     this.go('/Link');
-        //     return false;
-        //   case 52:
-        //     this.go('/Setting');
-        //     return false;
-        // }
       }
-    }
+    },
+    
   },
   mounted() {
     this.$store.dispatch('checkLogin',this);

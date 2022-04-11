@@ -12,6 +12,8 @@ export default {
 
 <style>
 #footer{
+    width: 100%;
+    margin-top: 1rem;
     padding: 1rem;
     background: var(--card-inner);
     opacity: 0.7;

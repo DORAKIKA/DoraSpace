@@ -51,7 +51,7 @@
       }
     },
     mounted(){
-      // this.checkLogin();
+      this.checkLogin();
       this.onLogin();
       this.$bus.$on('onLogin',this.onLogin);
       console.log(333)

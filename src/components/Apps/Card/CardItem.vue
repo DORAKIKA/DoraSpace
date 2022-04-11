@@ -4,9 +4,9 @@
       <div class="tags">
           <span v-for="tag in cardInfo.tags" :key="tag" class="tagItem">{{tag}}</span>
       </div>
-      <div class="process">
+      <!-- <div class="process">
           <el-progress :percentage="cardInfo.process"></el-progress>
-      </div>
+      </div> -->
   </div>
 </template>
 

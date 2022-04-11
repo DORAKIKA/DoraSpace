@@ -40,4 +40,9 @@ export default {
     background: var(--theme-color);
     padding-left: 1rem;
 }
+@media screen and (max-width:900px){
+    .LinkNav{
+        display: none;
+    }
+}
 </style>

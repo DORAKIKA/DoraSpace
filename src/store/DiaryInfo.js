@@ -1,10 +1,14 @@
 const axios = require("axios").default;
 const http = require("../http/index").default;
+import Vue from 'vue';
 // import Vue from 'vue';
 export default {
     actions:{
         addDiary(context,value){
             context.commit('AddDiary',value);
+        },
+        deleteDiary(context,value){
+            context.commit('DeleteDiary',value);
         },
         getDiaryData(context){
             if(!this.state.AppInfo.isLogin) return;
@@ -19,7 +23,8 @@ export default {
                     if(res.data.code === 404){
                         console.log(res);
                     }else if(res.data.code){
-                        context.commit('SetDiaries',res.data.data);
+                        context.commit('SetEmojis',res.data.data.emojis);
+                        context.commit('SetDiaries',res.data.data.diaries);
                     }
                 },
                 (error)=>{
@@ -37,7 +42,10 @@ export default {
         uploadDiaryData(context){
             if(!this.state.AppInfo.isLogin) return;
             let userAuth = localStorage.getItem('userAuth');
-            var data = JSON.stringify(context.state.diaries);
+            var data = JSON.stringify({
+                emojis: context.state.emojis,
+                diaries:context.state.diaries
+            });
             var config = {
                 method: 'put',
                 url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/diaryInfo.json`,
@@ -59,13 +67,26 @@ export default {
             state.diaries.push(value);
             this.dispatch('uploadDiaryData');
         },
+        DeleteDiary(state,value){
+            for(let i = 0; i < state.diaries.length; i++){
+                if(state.diaries[i].date === value){
+                    Vue.delete(state.diaries,i);
+                    this.dispatch('uploadDiaryData');
+                    break;
+                }
+            }
+        },
         SetDiaries(state,value){
             state.diaries = value;
+        },
+        SetEmojis(state,value){
+            state.emojis = value;
         }
     },
     state:{
         diaries:[
             {mood: '😁',date:'2022/04/01 20:01',content:'欢迎使用DoraSpace！'},
-        ]
+        ],
+        emojis:'😁,🥰,😑,🙄,😪,🤒,🤢,🥳,😕,😭,😞,😡,🤡',
     }
 }

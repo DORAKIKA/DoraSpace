@@ -9,11 +9,14 @@
       <WeiboHot v-if="AppInfo.config.Panel.showWeiboHot" class="asideItem"></WeiboHot>
       <ZhihuHot v-if="AppInfo.config.Panel.showZhihuHot" class="asideItem"></ZhihuHot>
     </div>
+    <AppFooter></AppFooter>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import AppFooter from '../Layout/AppFooter.vue';
+
 import LinkClickPanel from './Panel/LinkClickPanel.vue';
 
 import Hitokoto from './Panel/Hitokoto.vue';
@@ -25,6 +28,7 @@ export default {
     ...mapState(['AppInfo'])
   },
   components:{
+    AppFooter,
     BilibiliHot,
     Hitokoto,
     LinkClickPanel,
@@ -34,9 +38,17 @@ export default {
   methods:{
     onLogin(){
       this.$store.dispatch('getLinkData');
+    },
+    checkLogin(){
+      if(!this.$store.state.AppInfo.isLogin){
+        this.$router.replace({
+          path: '/Login',
+        })
+      }
     }
   },
   mounted(){
+    this.checkLogin();
     this.onLogin();
     this.$bus.$on('onLogin',this.onLogin);
   }
@@ -44,6 +56,9 @@ export default {
 </script>
 
 <style>
+#footer{
+  border-radius: 8px;
+}
 #AppPanel{
   flex: 1;
   padding: 1rem;
