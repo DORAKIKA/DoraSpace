@@ -25,6 +25,7 @@ export default {
                     }else if(res.data.code){
                         context.commit('SetEmojis',res.data.data.emojis);
                         context.commit('SetDiaries',res.data.data.diaries);
+                        this.$bus.$emit('onDiaryDataLoad');
                     }
                 },
                 (error)=>{

@@ -1,8 +1,13 @@
 <template>
   <div id="AppPanel">
     <div class="panelMain">
-      <Hitokoto v-if="AppInfo.config.Panel.showHitokoto" class="mainItem"></Hitokoto>
-      <LinkClickPanel v-if="AppInfo.config.Link.showLinkChart" class="mainItem item50"></LinkClickPanel>
+      <Hitokoto v-if="AppInfo.config.Panel.showHitokoto" class="mainItem col12"></Hitokoto>
+      <div class="mainItem col6 row2">
+        <DiaryEmoji></DiaryEmoji>
+      </div>
+      <div class="mainItem col6 row6">
+        <LinkClickPanel v-if="AppInfo.config.Link.showLinkChart"></LinkClickPanel>
+      </div>
     </div>
     <div class="panelAside">
       <BilibiliHot v-if="AppInfo.config.Panel.showBilibiliHot" class="asideItem"></BilibiliHot>
@@ -18,6 +23,7 @@ import { mapState } from 'vuex';
 import AppFooter from '../Layout/AppFooter.vue';
 
 import LinkClickPanel from './Panel/LinkClickPanel.vue';
+import DiaryEmoji from './Panel/DiaryEmoji.vue';
 
 import Hitokoto from './Panel/Hitokoto.vue';
 import BilibiliHot from './Panel/BilibiliHot.vue'
@@ -32,12 +38,14 @@ export default {
     BilibiliHot,
     Hitokoto,
     LinkClickPanel,
+    DiaryEmoji,
     WeiboHot,
     ZhihuHot,
   },
   methods:{
     onLogin(){
       this.$store.dispatch('getLinkData');
+      this.$store.dispatch('getDiaryData');
     },
     checkLogin(){
       if(!this.$store.state.AppInfo.isLogin){
@@ -67,16 +75,21 @@ export default {
   flex-wrap: wrap;
 }
 #AppPanel .panelMain{
-  width: calc(100% - 400px - 1rem);
+  width: calc(100% - 350px - 1rem);
+  display: grid;
+  grid-template-columns: repeat(12,1fr);
+  grid-template-rows: repeat(auto-fill,3rem);
+  grid-row-gap: 1rem;
+  grid-column-gap: 1rem;
+  grid-auto-rows: 3rem;
 }
 #AppPanel .panelMain .mainItem{
   background: var(--card-white);
   border-radius: 8px;
-  margin-top: 1rem;
 }
 
 #AppPanel .panelAside{
-  width: 400px;
+  width: 350px;
 }
 #AppPanel .panelAside .asideItem{
   background: var(--card-white);
@@ -97,9 +110,31 @@ export default {
   box-shadow: 3px 3px 8px var(--card-shadow);
 }
 
-#AppPanel .mainItem.item50{
-  width: calc(50% - 1rem);
+#AppPanel .mainItem.col12{
+  grid-column-start: span 12;
 }
+#AppPanel .mainItem.col6{
+  grid-column-start: span 6;
+}
+#AppPanel .mainItem.col4{
+  grid-column-start: span 4;
+}
+#AppPanel .mainItem.col3{
+  grid-column-start: span 3;
+}
+
+#AppPanel .mainItem.row6{
+  grid-row-start: span 6;
+}
+#AppPanel .mainItem.row4{
+  grid-row-start: span 4;
+}
+#AppPanel .mainItem.row2{
+  grid-row-start: span 2;
+}
+
+
+
 @media screen and (max-width:1200px) {
   #AppPanel .mainItem.item50{
     width: 100%;
@@ -113,5 +148,29 @@ export default {
     margin-top: 1rem;
     width: 100%;
   }
+
+  #AppPanel .mainItem.col12{
+    grid-column-start: span 12;
+  }
+  #AppPanel .mainItem.col6{
+    grid-column-start: span 12;
+  }
+  #AppPanel .mainItem.col4{
+    grid-column-start: span 12;
+  }
+  #AppPanel .mainItem.col3{
+    grid-column-start: span 6;
+  }
+
+  #AppPanel .mainItem.row6{
+    grid-row-start: span 6;
+  }
+  #AppPanel .mainItem.row4{
+    grid-row-start: span 4;
+  }
+  #AppPanel .mainItem.row2{
+    grid-row-start: span 2;
+  }
+
 }
 </style>

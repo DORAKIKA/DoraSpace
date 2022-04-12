@@ -55,6 +55,7 @@
                 v-model="cardInfo.content"
                 toolbarsBackground="var(--bg)"
                 previewBackground="var(--card-white)"
+                codeStyle="monokai"
                 @change="formChange"
             ></mavon-editor>
         </div>

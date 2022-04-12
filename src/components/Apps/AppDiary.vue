@@ -117,6 +117,11 @@ export default {
     border-radius: 8px;
     overflow: scroll;
 }
+#AppDiary::-webkit-scrollbar,
+#AppDiary .diaryContainer::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+}
 #AppDiary .diaryContainer .diary{
     padding: 1rem;
     border-radius: 8px;

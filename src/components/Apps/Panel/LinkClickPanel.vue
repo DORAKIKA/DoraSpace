@@ -17,21 +17,20 @@ computed:{
 methods:{
     drawChart(data){
         let dom = document.getElementById('eCharts-linkClick');
-        if(!this.linkChart){
-            this.linkChart = echarts.init(dom);
+        if(this.linkChart){
+            this.linkChart.dispose();
         }
+        this.linkChart = echarts.init(dom);
         this.linkChart.setOption({
-            title: {
-                text: '访问统计',
-                left: '16',
-                top: '16'
-            },
             tooltip: {
                 trigger: 'item'
             },
             legend: {
-                top: '40',
-                left: 'center'
+                top: '20',
+                left: 'center',
+                textStyle:{
+                    color: 'var(--font-color)',
+                }
             },
             series: [
                 {
@@ -41,7 +40,7 @@ methods:{
                     radius:['20%',"50%"],
                     // roseType:'area',
                     itemStyle: {
-                        borderRadius: 6,
+                        borderRadius: 4,
                         borderColor: '#fff',
                         borderWidth: 1
                     },
@@ -68,25 +67,34 @@ methods:{
         let drawLinks = links.splice(0,this.AppInfo.config.Link.chartLimit);
         this.drawChart(drawLinks);
         return null;
+    },
+    resize(){
+        this.linkChart.resize();
     }
 
 },
 mounted(){
-    window.addEventListener('resize',()=>{
-        this.linkChart.resize();
-    })
-    this.getTop10();
+    window.addEventListener('resize',this.resize);
+
     this.$bus.$on('onLinkDataLoad',this.getTop10);
+    this.$bus.$on('onDataLoad',this.getTop10);
+    this.getTop10();
 },
 beforeDestroy(){
+    if(this.linkChart){
+        this.linkChart.dispose();
+        this.linkChart = undefined;
+    }
+    console.log("destroy")
     this.$bus.$off('onLinkDataLoad',this.getTop10);
+    window.removeEventListener('resize',this.resize);
 }
 }
 </script>
 
 <style>
 #eCharts-linkClick{
-    width:100px;
-    height: 400px;
+    width:100%;
+    height: 100%;
 }
 </style>

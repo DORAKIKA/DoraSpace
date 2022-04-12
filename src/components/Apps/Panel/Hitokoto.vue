@@ -1,8 +1,8 @@
 <template>
   <div class="DsHitokoto">
       <div class="title">一言</div>
-      <div class="hitokoto">{{data.hitokoto}}</div>
-      <div class="from">——《{{data.from}}》</div>
+      <div class="hitokoto">「 {{data.hitokoto}} 」</div>
+      <div class="from">{{data.from}}</div>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     },
     methods:{
         getHitokoto(){
-            http.get('https://v1.hitokoto.cn/').then(
+            http.get('https://v1.hitokoto.cn?max_length=20').then(
                 (res)=>{
                     this.data = res.data;
                 }
@@ -34,8 +34,9 @@ export default {
 .DsHitokoto{
     padding: 1rem;
     display: flex;
-    line-height: 1.5rem;
     transition: 0.3s;
+    align-items: center;
+    justify-content: center;
 }
 .DsHitokoto:hover{
     color: var(--theme-color);

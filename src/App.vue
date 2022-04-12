@@ -165,49 +165,7 @@ main.el-main{
   width: 100%;
 }
 
-#login{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.loginBox{
-  width: 300px;
-  padding: 1rem;
-  background: var(--card-white);
-  box-shadow:  2px 2px 8px var(--card-inner);
-  border-radius: 8px;
-  display: flex;
-  flex-wrap: wrap;
-}
-#login .loginBox input{
-  width: 100%;
-  height: 2rem;
-  padding: 0 1rem;
-  border-radius: 4px;
-  margin: 0.5rem 0;
-  background: var(--card-inner);
-  border: none;
-  outline: none;
-  box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0) inset;
-  transition: 0.3s;
-}
-#login .loginBox input:hover{
-  box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0.1) inset;
-}
-#login .loginBox input:focus{
-  box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0.2) inset;
-}
-#login .loginBox .el-button{
-  width: 4rem;
-  height: 2rem;
-  line-height: 2rem;
-  padding: 0;
-  margin: 0.5rem 0;
-  background: var(--bg);
-  border: none;
-}
+
 
 @media screen and (max-width:900px) {
   ::-webkit-scrollbar{
