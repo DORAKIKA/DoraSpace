@@ -1,7 +1,7 @@
 <template>
   <div class="cardSetting">
     <div class="group-name">card设置</div>
-    <div class="group">
+    <div class="group card">
         <!-- 分类展开？ -->
         <div class="item">
         <div class="key">分类是否默认展开</div>

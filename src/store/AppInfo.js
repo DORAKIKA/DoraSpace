@@ -96,6 +96,26 @@ export default {
                 console.log(error);
             });
         },
+        getCustomStyle(context){
+            //get
+            if(!context.state.isLogin) return;
+            let userAuth = localStorage.getItem('userAuth')
+            http.get(`${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/custom.css`,{
+                headers:{
+                    'Authorization': `Basic ${userAuth}`
+                }
+            }).then(res=>{
+                if(res.data.code===404){
+                    console.log("获取自定义样式失败");
+                }else if(res.data.code){
+                    context.commit('SetCustomStyle',res.data.data);
+                    this.$bus.$emit('onCustomStyleLoad');
+                }
+            },error=>{
+                console.log(error)
+            });
+            
+        }
     },
     mutations:{
         UpdateConfig(state,value){
@@ -109,12 +129,23 @@ export default {
         },
         ToggleDark(state){
             state.config.isDark = !state.config.isDark;
+        },
+        SetCustomStyle(state,value){
+            state.customStyle = value;
         }
     },
     state:{
         config:{
             themeColor:"#386ade",
             isDark:false,
+            customStyle: false,
+            Nav:{
+                panel: {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel',show:true},
+                card: {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card',show:true},
+                link: {id:'AppLink',name:'Link',icon:'iconfont icon-link',link:'/Link',show:true},
+                diary: {id:'AppDiary',name:"Diary",icon:'iconfont icon-rili',link:'/Diary',show:true},
+                setting: {id:'AppSetting',name:'Setting',icon:'iconfont icon-shezhi',link:'/Setting',show:true},
+            },
             Panel:{
                 showBilibiliHot: true,
                 showWeiboHot: false,
@@ -133,12 +164,6 @@ export default {
         isLogin: false,
         https: window.location.origin[4]==='s'?'https':'http',
         origin: window.location.origin,
-        navItems:[
-            {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel'},
-            {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card'},
-            {id:'AppLink',name:'Link',icon:'iconfont icon-link',link:'/Link'},
-            {id:'AppDiary',name:"Diary",icon:'iconfont icon-rili',link:'/Diary'},
-            {id:'AppSetting',name:'Setting',icon:'iconfont icon-shezhi',link:'/Setting'},
-        ],
+        customStyle: '',
     }
 }

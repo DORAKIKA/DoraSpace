@@ -2,7 +2,8 @@
   <div id="AppPanel">
     <div class="panelMain">
       <Hitokoto v-if="AppInfo.config.Panel.showHitokoto" class="mainItem col12"></Hitokoto>
-      <div class="mainItem col6 row2">
+      <WeatherPanel class="mainItem col2 row1"></WeatherPanel>
+      <div class="mainItem col3 row2">
         <DiaryEmoji></DiaryEmoji>
       </div>
       <div class="mainItem col6 row6">
@@ -24,6 +25,7 @@ import AppFooter from '../Layout/AppFooter.vue';
 
 import LinkClickPanel from './Panel/LinkClickPanel.vue';
 import DiaryEmoji from './Panel/DiaryEmoji.vue';
+import WeatherPanel from './Panel/WeatherPanel.vue';
 
 import Hitokoto from './Panel/Hitokoto.vue';
 import BilibiliHot from './Panel/BilibiliHot.vue'
@@ -41,6 +43,7 @@ export default {
     DiaryEmoji,
     WeiboHot,
     ZhihuHot,
+    WeatherPanel,
   },
   methods:{
     onLogin(){
@@ -82,6 +85,7 @@ export default {
   grid-row-gap: 1rem;
   grid-column-gap: 1rem;
   grid-auto-rows: 3rem;
+  grid-auto-columns: 1fr;
 }
 #AppPanel .panelMain .mainItem{
   background: var(--card-white);
@@ -103,11 +107,12 @@ export default {
 
 #AppPanel .mainItem,
 #AppPanel .asideItem{
-  box-shadow: 1px 1px 3px var(--card-shadow);
+  border: 1px solid var(--bg);
+  transition: 0.3s;
 }
 #AppPanel .mainItem:hover,
 #AppPanel .asideItem:hover{
-  box-shadow: 3px 3px 8px var(--card-shadow);
+  border: 1px solid var(--theme-color);
 }
 
 #AppPanel .mainItem.col12{
@@ -122,6 +127,9 @@ export default {
 #AppPanel .mainItem.col3{
   grid-column-start: span 3;
 }
+#AppPanel .mainItem.col2{
+  grid-column-start: span 2;
+}
 
 #AppPanel .mainItem.row6{
   grid-row-start: span 6;
@@ -131,6 +139,9 @@ export default {
 }
 #AppPanel .mainItem.row2{
   grid-row-start: span 2;
+}
+#AppPanel .mainItem.row1{
+  grid-row-start: span 1;
 }
 
 
@@ -160,6 +171,9 @@ export default {
   }
   #AppPanel .mainItem.col3{
     grid-column-start: span 6;
+  }
+  #AppPanel .mainItem.col2{
+    grid-column-start: span 4;
   }
 
   #AppPanel .mainItem.row6{

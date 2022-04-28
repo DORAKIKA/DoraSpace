@@ -1,6 +1,6 @@
 <template>
     <div id="AppDiary">
-        <div class="diaryContainer">
+        <div class="diaryContainer card">
             <div class="timeLineItem" v-for="diary in formatDiaries" :key="diary.date">
                 <div class="style">
                     <div class="dot"></div>
@@ -13,9 +13,9 @@
                 </div>
             </div>
         </div>
-        <div class="diaryEditor">
+        <div class="diaryEditor card">
             <el-radio-group v-model="inputMood">
-                <el-radio v-for="emoji in emojis" :key="emoji" :label="emoji"></el-radio>
+                <el-radio v-for="emoji in emojis" :key="emoji[0]+'-'+emoji[1]" :label="emoji[0]+'-'+emoji[1]">{{emoji[0]}}</el-radio>
             </el-radio-group>
             <el-input type="textarea" v-model="inputContent"></el-input>
             <el-button @click="push" icon="el-icon-s-promotion"></el-button>
@@ -30,7 +30,6 @@ export default {
         return {
             inputMood:"",
             inputContent:"",
-            // emojis:['😁','🥰','😑','🙄','😪','🤒','🤢','🥳','😕','😭','😞','😡','🤡']
         }
     },
     computed:{
@@ -43,7 +42,14 @@ export default {
             return formatDiaries;
         },
         emojis(){
-            return this.DiaryInfo.emojis.split(',');
+            let emojis = [];
+            for(let i = 0; i <  this.DiaryInfo.emojis.split(';').length; i++){
+                let group = this.DiaryInfo.emojis.split(';')[i];
+                for(let emoji of group.split(',')){
+                    emojis.push([emoji,i]);
+                }
+            }
+            return emojis;
         }
     },
     methods:{
@@ -57,7 +63,8 @@ export default {
                 return;
             }
             let diary = {
-                mood: this.inputMood,
+                mood: this.inputMood.split('-')[0],
+                moodLv: this.inputMood.split('-')[1],
                 content: this.inputContent,
                 date: new Date().toLocaleString(),
             }
@@ -113,8 +120,6 @@ export default {
 #AppDiary .diaryContainer{
     padding: 2rem 1rem;
     width: calc(60% - 1rem);
-    background: var(--card-white);
-    border-radius: 8px;
     overflow: scroll;
 }
 #AppDiary::-webkit-scrollbar,
@@ -167,6 +172,7 @@ export default {
     width: 100%;
     height: 16px;
     line-height: 16px;
+    margin-bottom: 0.5rem;
 }
 #AppDiary .diaryContainer .timeLineItem .container .content{
     padding: 1rem;
@@ -210,8 +216,6 @@ export default {
 #AppDiary .diaryEditor{
     width: 40%;
     padding: 1rem;
-    background: var(--card-white);
-    border-radius: 8px;
     display: flex;
     flex-direction: column;
     position: relative;

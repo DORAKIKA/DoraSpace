@@ -7,7 +7,7 @@
         </div>
         <div class="container">
             <LinkNav v-if="this.$store.state.AppInfo.config.Link.showNav" :sortLinkInfo="sortLinkInfo"></LinkNav>
-            <div class="listBox">
+            <div class="listBox card">
                 <div class="lists">
                     <LinkList
                         v-for="list in sortLinkInfo"
@@ -152,7 +152,7 @@ export default {
                     listName:listId,
                     name:inputArr[1]?inputArr[1]:inputArr[0],
                     icon:"",
-                    linkTo:this.inputContent,
+                    linkTo:this.inputArr[0],
                     click:0
                 },$bus:this.$bus});
             this.inputContent = "";
@@ -240,9 +240,7 @@ export default {
     flex: 1;
     min-height: calc(100% - 2rem);
     overflow: scroll;
-    background: var(--card-white);
     margin-top: 1rem;
-    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

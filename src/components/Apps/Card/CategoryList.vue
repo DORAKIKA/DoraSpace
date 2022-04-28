@@ -1,5 +1,5 @@
 <template>
-  <div class="cardCategoryList" :class="{fold:isFold}">
+  <div class="cardCategoryList card" :class="{fold:isFold}">
       <div class="titleBar">
         <div class="name">{{category.name}}</div>
         <div class="desc">{{category.desc}}</div>
@@ -76,8 +76,6 @@ export default {
 .cardCategoryList{
     width: 100%;
     padding: 1rem;
-    background: var(--card-white);
-    border-radius: 8px;
     margin-top: 1rem;
     transition: 0.3s;
 }

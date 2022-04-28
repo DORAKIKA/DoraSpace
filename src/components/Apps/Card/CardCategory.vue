@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click="addCategory" class="addCategory" title="添加分类">+</div>
+    <div @click="addCategory" class="addCategory card" title="添加分类">+</div>
     <CategoryList :editCategory="editCategory" v-for="(category,bid) in this.categories" :key="bid" :category="category" :bid="bid"></CategoryList>
     <el-dialog @close="closeDialog" class="categoryEdit" title="分类信息" :visible="isEditCategory || isCreateCategory">
       <div class="container">
@@ -82,9 +82,7 @@ export default {
 <style>
 .addCategory{
   padding: 1rem;
-  background: var(--card-white);
   margin-top: 1rem;
-  border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: 0.3s;

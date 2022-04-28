@@ -1,7 +1,7 @@
 <template>
   <div class="PanelSetting">
     <div class="group-name">Panel设置</div>
-    <div class="group">
+    <div class="group card">
         <!-- 一言 -->
         <div class="item">
             <div class="key">显示一言</div>

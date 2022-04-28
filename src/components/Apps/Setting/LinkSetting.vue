@@ -1,7 +1,7 @@
 <template>
   <div class="linkSetting">
     <div class="group-name">link设置</div>
-    <div class="group">
+    <div class="group card">
         <!-- link点击视图 -->
         <div class="item">
             <div class="key">面板显示点击分布图</div>

@@ -105,8 +105,6 @@ export default {
   background: var(--theme-color);
 }
 #AppSetting .group{
-  background: var(--card-white);
-  border-radius: 8px;
   margin-bottom: 0.5rem;
   padding: 0.5rem 1rem;
 }

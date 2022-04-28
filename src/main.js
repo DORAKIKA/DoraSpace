@@ -9,6 +9,9 @@ import {VueJsonp} from 'vue-jsonp';
 
 import store from './store/index';
 
+
+import './style/index.css';
+
 //提示信息不显示
 Vue.config.productionTip = false
 
@@ -22,7 +25,7 @@ Vue.use(store)
 Vue.use(mavonEditor);
 Vue.use(VueJsonp);
 
-const vm = new Vue({
+new Vue({
   //将App组件放入容器中
   render: h => h(App),
   store: store,
@@ -30,7 +33,8 @@ const vm = new Vue({
   //公共总线
   beforeCreate(){
     Vue.prototype.$bus = this;
+    this.$store.$bus = this;
   }
 }).$mount('#app')
 
-vm.$store.$bus = vm.$bus;
+// vm.$store.$bus = vm.$bus;

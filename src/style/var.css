@@ -1,0 +1,36 @@
+:root{
+    --theme-color: #5588ff;
+    --theme-color2: #f70095;
+    --theme-light-color: #e7eeff;
+    --bg: #edf4ff;
+    --card-white: #fff;
+    --card-inner: #f1f4f9;
+    --card-shadow: #999999;
+    --font-color: #333;
+  
+    --over90: rgba(255,255,255,0.9);
+    --over80: rgba(255,255,255,0.8);
+    --over70: rgba(255,255,255,0.7);
+    --over60: rgba(255,255,255,0.6);
+    --over50: rgba(255,255,255,0.5);
+    --over40: rgba(255,255,255,0.4);
+    --over30: rgba(255,255,255,0.3);
+  }
+  [data-theme="dark"]{
+    --theme-color: #334455;
+    --theme-color2: #f70095;
+    --theme-light-color: #222226;
+    --bg: #222226;
+    --card-white: #333;
+    --card-inner: #444;
+    --card-shadow: #111111;
+    --font-color: #eee;
+  
+    --over90: rgba(51,51,51,0.9);
+    --over80: rgba(51,51,51,0.8);
+    --over70: rgba(51,51,51,0.7);
+    --over60: rgba(51,51,51,0.6);
+    --over50: rgba(51,51,51,0.5);
+    --over40: rgba(51,51,51,0.4);
+    --over30: rgba(51,51,51,0.3);
+  }

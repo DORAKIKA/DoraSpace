@@ -4,7 +4,7 @@
         :effect="$store.state.AppInfo.config.isDark?'light':'dark'"
         placement="left"
         :content="item.name"
-        v-for="item in this.$store.state.AppInfo.navItems"
+        v-for="item in this.filterNavs"
         :key="item.id"
     >
         <router-link
@@ -24,25 +24,47 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     data(){
         return{
             showNavItem: false,
-            items:[
-                {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel'},
-                {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card'},
-                {id:'AppLink',name:'Link',icon:'iconfont icon-link',link:'/Link'},
-                {id:'AppDiary',name:"Diary",icon:'iconfont icon-rili',link:'/Diary'},
-                {id:'AppSetting',name:'Setting',icon:'iconfont icon-shezhi',link:'/Setting'},
-            ],
+        }
+    },
+    computed:{
+        ...mapState(['AppInfo']),
+        filterNavs(){
+            let navs = [];
+            for(let name in this.AppInfo.config.Nav){
+                if(this.AppInfo.config.Nav[name].show){
+                    navs.push(this.AppInfo.config.Nav[name]);
+                }
+            }
+            return navs;
         }
     },
     methods:{
         toggleNav(){
             this.showNavItem = !this.showNavItem;
         },
+        go(url){
+            if(this.$router.currentRoute.path !== url){
+            this.$router.replace({
+                path: url,
+            })
+            }
+        },
+        changePage(e){
+            if(e.altKey){
+                if(this.filterNavs[e.keyCode-49]){
+                    this.go(this.filterNavs[e.keyCode-49].link);
+                    return false;
+                }
+            }
+        },
     },
     mounted(){
+        window.addEventListener('keydown',this.changePage)
     }
 }
 </script>
