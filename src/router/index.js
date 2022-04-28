@@ -9,7 +9,6 @@ import AppLink from '../components/Apps/AppLink.vue';
 import AppDiary from '../components/Apps/AppDiary.vue';
 
 import CardCategory from '../components/Apps/Card/CardCategory.vue'
-import CardPanel from '../components/Apps/Card/CardPanel.vue'
 import CardTag from '../components/Apps/Card/CardTag.vue'
 import CardReview from '../components/Apps/Card/CardReview.vue'
 import CardInfo from '../components/Apps/Card/CardInfo.vue'
@@ -38,10 +37,6 @@ export default new VueRouter({
                 {
                     path: '',
                     component: CardCategory,
-                },
-                {
-                    path: 'panel',
-                    component: CardPanel,
                 },
                 {
                     path: 'category',

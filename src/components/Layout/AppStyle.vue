@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
     computed:{
-        ...mapState(['AppInfo']),
+        ...mapGetters(['customStyle'])
     },
     methods:{
         updateStyle(){
@@ -14,7 +14,7 @@ export default {
             if(dom){
                 dom.innerHTML = `
                 <style>
-                ${this.AppInfo.customStyle}
+                ${this.customStyle}
                 </style>
                 `
             }

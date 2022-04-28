@@ -6,7 +6,7 @@
         <el-button @click="addCard(category.id)" type="primary" icon="el-icon-plus" circle></el-button>
         <el-button @click="editCategory(category)" type="primary" icon="el-icon-edit" circle></el-button>
         <el-button @click="toggleExtended" type="primary" icon="el-icon-arrow-down" circle></el-button>
-        <el-button @click="deleteCategory(category.id)" type="danger" icon="el-icon-delete" circle></el-button>
+        <el-button @click="handleDelete(category.id)" type="danger" icon="el-icon-delete" circle></el-button>
       </div>
       <div class="list">
           <CardItem v-for="cid in category.cards" :key="cid" :cid="cid" :bid="bid"></CardItem>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import CardItem from './CardItem.vue'
 export default {
     data(){
@@ -22,26 +23,27 @@ export default {
             name: "分类",
             color: "#386ade",
             description: "这是一个分类描述",
-            category:{},
             isFold: true,
         }
     },
+    computed:{
+        ...mapGetters(['config','CardData']),
+        category(){
+            return this.CardData.categories[this.bid];
+        }
+    },
     methods:{
+        ...mapActions(['addCard','deleteCategory']),
         toggleExtended(){
             this.isFold = !this.isFold;
         },
-        addCard(bid){
-            console.log(bid);
-            // this.category.cards.push("c009"+new Date().getTime())
-            this.$store.dispatch("addCard",bid);
-        },
-        deleteCategory(id){
+        handleDelete(id){
             this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
                 confirmButtonText: '删除',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$store.dispatch("deleteCategory",id);
+                this.deleteCategory(id);
                 this.$message({
                     type: 'success',
                     message: '删除成功!'
@@ -59,14 +61,7 @@ export default {
         CardItem,
     },
     mounted(){
-        this.category = this.$store.state.CardInfo.categories?this.$store.state.CardInfo.categories[this.bid]:{};
-        this.isFold = this.$store.state.AppInfo.config.Card?!this.$store.state.AppInfo.config.Card.categoryExtended:true;
-        console.log(this.$store.state.AppInfo.config.Card)
-        this.$bus.$on("onCardDataLoad",()=>{
-            this.category = this.$store.state.CardInfo.categories[this.bid];
-            this.isExtended = this.$store.state.AppInfo.config.Card.categoryExtended;
-        });
-        
+        this.isFold = this.config.Card?!this.config.Card.categoryExtended:true;
     },
     props:['bid','editCategory']
 }

@@ -14,10 +14,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import Vue from 'vue';
 export default {
+    computed:{
+        ...mapGetters(['LinkData'])
+    },
     methods:{
         linkClick(){
-            this.$store.commit('LinkClick',{linkId:this.linkId,listId:this.listId});
+            console.log(this.LinkData)
+            if(this.LinkData[this.listId][this.linkId].click){
+                this.LinkData[this.listId][this.linkId].click++;
+            }else{
+                Vue.set(this.LinkData[this.listId][this.linkId],'click', 1);
+            }
         }
     },
     props:['link','linkId','listId','editLink']

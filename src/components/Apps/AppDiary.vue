@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
     data(){
         return {
@@ -33,18 +33,21 @@ export default {
         }
     },
     computed:{
-        ...mapState(['DiaryInfo']),
+        ...mapState(['isLogin']),
+        ...mapGetters(['DiaryData']),
         formatDiaries(){
+            if(!this.DiaryData.diaries) return [];
             let formatDiaries = [];
-            for(let i = this.DiaryInfo.diaries.length-1; i >= 0; i--){
-                formatDiaries.push(this.DiaryInfo.diaries[i]);
+            for(let i = this.DiaryData.diaries.length-1; i >= 0; i--){
+                formatDiaries.push(this.DiaryData.diaries[i]);
             }
             return formatDiaries;
         },
         emojis(){
+            if(!this.DiaryData.emojis) return [];
             let emojis = [];
-            for(let i = 0; i <  this.DiaryInfo.emojis.split(';').length; i++){
-                let group = this.DiaryInfo.emojis.split(';')[i];
+            for(let i = 0; i <  this.DiaryData.emojis.split(';').length; i++){
+                let group = this.DiaryData.emojis.split(';')[i];
                 for(let emoji of group.split(',')){
                     emojis.push([emoji,i]);
                 }
@@ -53,6 +56,7 @@ export default {
         }
     },
     methods:{
+        ...mapActions(['addDiaryItem','deleteDiaryItem']),
         push(){
             if(!this.inputContent){
                 this.$message({
@@ -68,14 +72,11 @@ export default {
                 content: this.inputContent,
                 date: new Date().toLocaleString(),
             }
-            this.$store.dispatch('addDiary',diary);
+            this.addDiaryItem(diary);
             this.inputContent = '';
         },
-        onLogin(){
-            this.$store.dispatch('getDiaryData');
-        },
         checkLogin(){
-            if(!this.$store.state.AppInfo.isLogin){
+            if(!this.isLogin){
                 this.$router.replace({
                 path: '/Login',
                 })
@@ -87,7 +88,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$store.dispatch('deleteDiary',date);
+                this.deleteDiaryItem(date);
                 this.$message({
                     type: 'success',
                     message: '删除成功!'
@@ -103,8 +104,6 @@ export default {
     },
     mounted(){
         this.checkLogin();
-        this.$bus.$on('onLogin',this.onLogin);
-        this.onLogin();
     }
 }
 </script>

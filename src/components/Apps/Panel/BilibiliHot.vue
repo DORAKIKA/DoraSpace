@@ -20,7 +20,7 @@ export default {
     computed:{
     },
     mounted(){
-        http.get(`${this.$store.state.AppInfo.origin}/bilibili/pgc/web/rank/list?season_type=1&day=7`).then((res)=>{
+        http.get(`${this.$store.state.origin}/bilibili/pgc/web/rank/list?season_type=1&day=7`).then((res)=>{
             this.data = res.data.result.list.splice(0,10);
         },error=>{
             console.log(error);

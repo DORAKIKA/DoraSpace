@@ -124,9 +124,6 @@ export default {
                 ...value,
             };
         },
-        GetAuth(state){
-            return state.auth;
-        },
         ToggleDark(state){
             state.config.isDark = !state.config.isDark;
         },

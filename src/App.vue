@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :data-theme="AppInfo.config.isDark?'dark':'light'" :style="`--theme-color:${AppInfo.config.themeColor}`">
+  <div id="app" :data-theme="config.isDark?'dark':'light'" :style="`--theme-color:${config.themeColor}`">
     <el-container>
       <AppNav></AppNav>
       <el-main>
@@ -8,14 +8,14 @@
           </transition>
       </el-main>
     </el-container>
-    <AppStyle v-if="AppInfo.config.customStyle"></AppStyle>
+    <AppStyle v-if="config.customStyle"></AppStyle>
   </div>
 </template>
 
 <script>
 import AppNav from './components/Layout/AppNav.vue';
 import AppStyle from './components/Layout/AppStyle.vue';
-import {mapState} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import 'animate.css'
 
 export default {
@@ -25,23 +25,22 @@ export default {
     }
   },
   computed:{
-      ...mapState(['AppInfo'])
+      ...mapGetters(['config'])
   },
   components: {
     AppNav,
     AppStyle,
   },
   methods: {
-    getConfig(){
-      this.$store.dispatch('getConfig',this.$bus);
-    },
-    
+    ...mapActions(['getAppData','getConfig'])
   },
   mounted() {
     this.$store.dispatch('checkLogin',this);
-    this.$bus.$on('onLogin',this.getConfig);
 
     this.getConfig();
+  },
+  created(){
+    this.getAppData();
   },
   beforeDestroy() {
     this.$bus.$off('onLogin',this.getConfig);

@@ -4,7 +4,7 @@
       <div class="option-item filterCategory">
         <el-select v-model="filterOptions.category" placeholder="分类">
           <el-option
-            v-for="category in $store.state.CardInfo.categories"
+            v-for="category in CardData.categories"
             :key="category.id"
             :value="category.id"
             :label="category.name"
@@ -15,7 +15,7 @@
       <div class="option-item filterTags">
         <el-select placeholder="标签" v-model="filterOptions.tags" multiple collapse-tags="">
           <el-option
-            v-for="(tag,name) in $store.state.CardInfo.tags"
+            v-for="(tag,name) in CardData.tags"
             :key="name"
             :label="name"
             :value="name"
@@ -75,6 +75,7 @@
 
 <script>
 import VditorPreview from 'vditor/dist/method.min'
+import { mapGetters } from 'vuex';
 export default {
   data(){
     return {
@@ -90,16 +91,17 @@ export default {
     }
   },
   computed:{
+    ...mapGetters(['CardData']),
     category(){
-      return this.$store.state.CardInfo.categories[this.card.category] ? this.$store.state.CardInfo.categories[this.card.category]:"";
-    }
+      return this.CardData.categories[this.card.category] ? this.CardData.categories[this.card.category]:"";
+    },
   },
   methods:{
     updateToMd:async(_this)=>{
       _this.cardHtml = await VditorPreview.md2html(_this.card.content);
     },
     doFilter(){
-      let cards = this.$store.state.CardInfo.cards;
+      let cards = this.CardData.cards;
       this.filterCards.length = 0;
       for(let id in cards){
         if(this.filterOptions.category && cards[id].category !== this.filterOptions.category){
@@ -121,27 +123,16 @@ export default {
       }
     },
     selectChange(){
-      this.card = this.$store.state.CardInfo.cards[this.cardId];
+      this.card = this.CardData.cards[this.cardId];
+    },
+    changeRandomCard(){
+      let randomId = "c003"
+      this.card = this.CardData.cards[randomId]?this.CardData.cards[randomId]:{content:""};
+      this.updateToMd(this)
     }
   },
   mounted(){
-    if(this.$store.state.CardInfo.cards){
-      // let cards = Object.keys(this.$store.state.CardInfo.cards);
-      // let randomId = cards.length>0 ? cards[Math.floor(Math.random()*cards.length)] : 'default';
-      
-      let randomId = "c003"
-      this.card = this.$store.state.CardInfo.cards[randomId]?this.$store.state.CardInfo.cards[randomId]:{content:""};
-      this.updateToMd(this)
-    }
-    this.$bus.$on('onCardDataLoad',()=>{
-      // let cards = Object.keys(this.$store.state.CardInfo.cards);
-      // console.log(this.$store.state.CardInfo.cards)
-      // let randomId = cards.length>0 ? cards[Math.floor(Math.random()*cards.length)] : 'default';
-      let randomId = "c003"
-      this.card = this.$store.state.CardInfo.cards[randomId];
-      console.log(randomId)
-      this.updateToMd(this)
-    })
+    this.changeRandomCard();
   }
 }
 </script>

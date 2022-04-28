@@ -7,7 +7,7 @@
             <div class="key">显示一言</div>
             <div class="value">
                 <el-switch
-                v-model="PanelConfig.showHitokoto">
+                v-model="config.Panel.showHitokoto">
                 </el-switch>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="key">显示B站番剧</div>
             <div class="value">
                 <el-switch
-                v-model="PanelConfig.showBilibiliHot">
+                v-model="config.Panel.showBilibiliHot">
                 </el-switch>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <div class="key">显示微博热榜</div>
             <div class="value">
                 <el-switch
-                v-model="PanelConfig.showWeiboHot">
+                v-model="config.Panel.showWeiboHot">
                 </el-switch>
             </div>
         </div>
@@ -35,7 +35,7 @@
             <div class="key">显示知乎热榜</div>
             <div class="value">
                 <el-switch
-                v-model="PanelConfig.showZhihuHot">
+                v-model="config.Panel.showZhihuHot">
                 </el-switch>
             </div>
         </div>
@@ -44,20 +44,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
-    data(){
-        return{
-        }
-    },
     computed:{
-        ...mapState(['AppInfo']),
-        PanelConfig(){
-            return this.AppInfo.config.Panel;
-        }
+        ...mapGetters(['config']),
     },
-    mounted() {
-    }
 }
 </script>
 

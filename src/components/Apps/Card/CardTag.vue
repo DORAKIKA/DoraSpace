@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import CardItem from './CardItem.vue';
 export default {
   data(){
@@ -25,6 +26,12 @@ export default {
       colors:['#386ade','#ff6655','#18e7ae','#61649f'],
       showTag: '',
     }
+  },
+  computed:{
+    tagCards(){
+      return this.CardData.tags[this.showTag];
+    },
+    ...mapGetters(['CardData']),
   },
   methods:{
     toTag(name){
@@ -39,16 +46,8 @@ export default {
       }
     }
   },
-  computed:{
-    tagCards(){
-      return this.$store.state.CardInfo.tags[this.showTag];
-    },
-  },
   mounted(){
-    this.tags = this.$store.state.CardInfo.tags;
-    this.$bus.$on('onCardDataLoad',()=>{
-      this.tags = this.$store.state.CardInfo.tags;
-    });
+    this.tags = this.CardData.tags;
     if(this.$route.query.name){
       this.showMode = 'tag';
       this.showTag = this.$route.query.name;

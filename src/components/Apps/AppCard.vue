@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
   export default {
     data() {
       return {
@@ -31,6 +32,9 @@
         isCollapse: true
       };
     },
+    computed:{
+      ...mapState(['isLogin'])
+    },
     methods:{
       go(e){
         if(this.$router.currentRoute.path !== e.currentTarget.dataset.target){
@@ -40,21 +44,15 @@
         }
       },
       checkLogin(){
-        if(!this.$store.state.AppInfo.isLogin){
+        if(!this.isLogin){
           this.$router.replace({
             path: '/Login',
           })
         }
       },
-      onLogin(){
-        this.$store.dispatch('initCardData',this.$bus);
-      }
     },
     mounted(){
       this.checkLogin();
-      this.onLogin();
-      this.$bus.$on('onLogin',this.onLogin);
-      console.log(333)
     }
   }
 </script>

@@ -12,7 +12,13 @@ data(){
     }
 },
 computed:{
-    ...mapState(['LinkInfo','AppInfo'])
+    ...mapState(['LinkData','config'])
+},
+watch:{
+    LinkData:function(){
+        console.log(1)
+        this.getTop10()
+    }
 },
 methods:{
     drawChart(data){
@@ -51,11 +57,11 @@ methods:{
     }, 
     getTop10(){
         let links = [];
-        for(let listId in this.$store.state.LinkInfo.links){
-            for(let linkId in this.$store.state.LinkInfo.links[listId]){
+        for(let listId in this.LinkData){
+            for(let linkId in this.LinkData[listId]){
                 let link = {};
-                link.value = this.$store.state.LinkInfo.links[listId][linkId].click?this.$store.state.LinkInfo.links[listId][linkId].click:0;
-                link.name = this.$store.state.LinkInfo.links[listId][linkId].name;
+                link.value = this.LinkData[listId][linkId].click?this.LinkData[listId][linkId].click:0;
+                link.name = this.LinkData[listId][linkId].name;
                 if(link.value){
                     links.push(link);
                 }
@@ -64,7 +70,7 @@ methods:{
         links.sort((a,b)=>{
             return b.value - a.value;
         });
-        let drawLinks = links.splice(0,this.AppInfo.config.Link.chartLimit);
+        let drawLinks = links.splice(0,this.config.Link.chartLimit);
         this.drawChart(drawLinks);
         return null;
     },
@@ -75,9 +81,6 @@ methods:{
 },
 mounted(){
     window.addEventListener('resize',this.resize);
-
-    this.$bus.$on('onLinkDataLoad',this.getTop10);
-    this.$bus.$on('onDataLoad',this.getTop10);
     this.getTop10();
 },
 beforeDestroy(){
@@ -85,8 +88,6 @@ beforeDestroy(){
         this.linkChart.dispose();
         this.linkChart = undefined;
     }
-    console.log("destroy")
-    this.$bus.$off('onLinkDataLoad',this.getTop10);
     window.removeEventListener('resize',this.resize);
 }
 }

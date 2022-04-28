@@ -16,12 +16,11 @@ export default {
         }
     },
     computed:{
-        ...mapState(['DiaryInfo']),
+        ...mapState(['DiaryData']),
         filterDiaries(){
-            return this.DiaryInfo.diaries.filter(diary=>{
+            return this.DiaryData.diaries.filter(diary=>{
                 let now = new Date().getTime();
                 let time = new Date(diary.date.split(' ')[0]).getTime();
-                console.log(diary.date,time,now)
                 return (now-time)<7*24*60*60*1000
             })
         }

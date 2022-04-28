@@ -1,19 +1,19 @@
 <template>
   <div id="AppPanel">
     <div class="panelMain">
-      <Hitokoto v-if="AppInfo.config.Panel.showHitokoto" class="mainItem col12"></Hitokoto>
-      <WeatherPanel class="mainItem col2 row1"></WeatherPanel>
+      <Hitokoto v-if="config.Panel.showHitokoto" class="mainItem col12"></Hitokoto>
+      <!-- <WeatherPanel class="mainItem col2 row1"></WeatherPanel> -->
       <div class="mainItem col3 row2">
         <DiaryEmoji></DiaryEmoji>
       </div>
       <div class="mainItem col6 row6">
-        <LinkClickPanel v-if="AppInfo.config.Link.showLinkChart"></LinkClickPanel>
+        <LinkClickPanel v-if="config.Link.showLinkChart"></LinkClickPanel>
       </div>
     </div>
     <div class="panelAside">
-      <BilibiliHot v-if="AppInfo.config.Panel.showBilibiliHot" class="asideItem"></BilibiliHot>
-      <WeiboHot v-if="AppInfo.config.Panel.showWeiboHot" class="asideItem"></WeiboHot>
-      <ZhihuHot v-if="AppInfo.config.Panel.showZhihuHot" class="asideItem"></ZhihuHot>
+      <BilibiliHot v-if="config.Panel.showBilibiliHot" class="asideItem"></BilibiliHot>
+      <WeiboHot v-if="config.Panel.showWeiboHot" class="asideItem"></WeiboHot>
+      <ZhihuHot v-if="config.Panel.showZhihuHot" class="asideItem"></ZhihuHot>
     </div>
     <AppFooter></AppFooter>
   </div>
@@ -25,7 +25,7 @@ import AppFooter from '../Layout/AppFooter.vue';
 
 import LinkClickPanel from './Panel/LinkClickPanel.vue';
 import DiaryEmoji from './Panel/DiaryEmoji.vue';
-import WeatherPanel from './Panel/WeatherPanel.vue';
+// import WeatherPanel from './Panel/WeatherPanel.vue';
 
 import Hitokoto from './Panel/Hitokoto.vue';
 import BilibiliHot from './Panel/BilibiliHot.vue'
@@ -33,7 +33,7 @@ import WeiboHot from './Panel/WeiboHot.vue';
 import ZhihuHot from './Panel/ZhihuHot.vue';
 export default {
   computed:{
-    ...mapState(['AppInfo'])
+    ...mapState(['config','isLogin'])
   },
   components:{
     AppFooter,
@@ -43,15 +43,11 @@ export default {
     DiaryEmoji,
     WeiboHot,
     ZhihuHot,
-    WeatherPanel,
+    // WeatherPanel,
   },
   methods:{
-    onLogin(){
-      this.$store.dispatch('getLinkData');
-      this.$store.dispatch('getDiaryData');
-    },
     checkLogin(){
-      if(!this.$store.state.AppInfo.isLogin){
+      if(!this.isLogin){
         this.$router.replace({
           path: '/Login',
         })
@@ -60,8 +56,6 @@ export default {
   },
   mounted(){
     this.checkLogin();
-    this.onLogin();
-    this.$bus.$on('onLogin',this.onLogin);
   }
 }
 </script>

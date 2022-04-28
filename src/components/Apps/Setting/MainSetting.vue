@@ -15,7 +15,7 @@
                     v-for="color in themeColors"
                     :key="color"
                     @click.prevent="changeThemeColor(color)" 
-                    :class="AppInfo.config.themeColor===color?'checked':''"
+                    :class="config.themeColor===color?'checked':''"
                     :style="`background:${color}`">
                 </button>
                 </div>
@@ -26,7 +26,7 @@
             <div class="key">夜间模式</div>
             <div class="value">
                 <el-switch
-                v-model="AppInfo.config.isDark"
+                v-model="config.isDark"
                 active-color="var(--theme-color)"
                 inactive-color="var(--theme-color)">
                 </el-switch>
@@ -36,7 +36,7 @@
             <div class="key">启用自定义样式</div>
             <div class="value">
                 <el-switch
-                v-model="AppInfo.config.customStyle"
+                v-model="config.customStyle"
                 active-color="var(--theme-color)"
                 inactive-color="var(--theme-color)">
                 </el-switch>
@@ -47,25 +47,25 @@
         <div class="item">
             <div class="key">启用Panel面板</div>
             <div class="value">
-                <el-switch v-model="AppInfo.config.Nav.panel.show"></el-switch>
+                <el-switch v-model="config.Nav.panel.show"></el-switch>
             </div>
         </div>
         <div class="item">
             <div class="key">启用Card面板</div>
             <div class="value">
-                <el-switch v-model="AppInfo.config.Nav.card.show"></el-switch>
+                <el-switch v-model="config.Nav.card.show"></el-switch>
             </div>
         </div>
         <div class="item">
             <div class="key">启用Link面板</div>
             <div class="value">
-                <el-switch v-model="AppInfo.config.Nav.link.show"></el-switch>
+                <el-switch v-model="config.Nav.link.show"></el-switch>
             </div>
         </div>
         <div class="item">
             <div class="key">启用Diary面板</div>
             <div class="value">
-                <el-switch v-model="AppInfo.config.Nav.diary.show"></el-switch>
+                <el-switch v-model="config.Nav.diary.show"></el-switch>
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
     data(){
         return{
@@ -82,11 +82,11 @@ export default {
         }
     },
     computed:{
-        ...mapState(['AppInfo'])
+        ...mapGetters(['config']),
     },
     methods:{
         changeThemeColor(value){
-            this.AppInfo.config.themeColor = value;
+            this.config.themeColor = value;
         },
         goLogin(){
             this.$router.replace({

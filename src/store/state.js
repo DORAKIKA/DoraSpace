@@ -25,8 +25,25 @@ const state = {
             showNav: true,
         }
     },
-    isLogin: false,
+    isLogin: true,
     https: window.location.origin[4]==='s'?'https':'http',
     origin: window.location.origin,
     customStyle: '',
+    DiaryInfo: {
+        diaries:[
+            {mood: '😁',date:'2022/04/01 20:01',content:'欢迎使用DoraSpace！'},
+        ],
+        emojis:'😁,🥰,🥳;😑,🙄,😪,🤒,😕;🤢,😭,😞,😡,🤡',
+    },
+
+    CardData:{},
+    LinkData:{},
+    DiaryData:{
+        diaries:[
+            {mood: '😁',date:'2022/04/01 20:01',content:'欢迎使用DoraSpace！'},
+        ],
+        emojis:'😁,🥰,🥳;😑,🙄,😪,🤒,😕;🤢,😭,😞,😡,🤡',
+    },
+    SettingData:{},
 }
+export default state;

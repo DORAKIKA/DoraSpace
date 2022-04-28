@@ -2,8 +2,8 @@
     <div id="AppLink">
         <div class="searchOrAdd">
             <i @click="search" class="el-icon-search"></i>
-            <input placeholder="请输入链接Ctrl+Enter或右侧按钮添加链接、或输入内容Enter或左侧按钮进行搜索" v-model="inputContent" @keyup.enter.exact="search" @keyup.ctrl.enter="addLink"/>
-            <i @click="addLink" class="el-icon-circle-plus-outline"></i>
+            <input placeholder="请输入链接Ctrl+Enter或右侧按钮添加链接、或输入内容Enter或左侧按钮进行搜索" v-model="inputContent" @keyup.enter.exact="search" @keyup.ctrl.enter="handleAdd"/>
+            <i @click="handleAdd" class="el-icon-circle-plus-outline"></i>
         </div>
         <div class="container">
             <LinkNav v-if="this.$store.state.AppInfo.config.Link.showNav" :sortLinkInfo="sortLinkInfo"></LinkNav>
@@ -62,6 +62,7 @@
 import LinkNav from './Link/LinkNav.vue';
 import LinkList from './Link/LinkList.vue';
 import AppFooter from '../Layout/AppFooter.vue';
+import { mapActions, mapState } from 'vuex';
 
 export default {
     data(){
@@ -73,7 +74,6 @@ export default {
             editData:{},
             editListId:"",
             editLinkId:"",
-            LinkInfo:{},
             icons:[
                 {url:'https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/icon/linkIcon/1.png',name:"icon-1"},
                 {url:'https://doraspace-1303371957.cos.ap-nanjing.myqcloud.com/icon/linkIcon/2.png',name:"icon-2"},
@@ -107,17 +107,18 @@ export default {
         }
     },
     computed:{
+        ...mapState(['isLogin','LinkData']),
         sortLinkInfo(){
             let res = [];
-            for(let key in this.LinkInfo.links){
+            for(let key in this.LinkData){
                 let list = {};
                 list.id = key;
-                // list.links = this.LinkInfo[key];
+                // list.links = this.LinkData[key];
                 list.links = []
                 list.clicks = 0;
-                for(let linkId in this.LinkInfo.links[key]){
-                    list.clicks += this.LinkInfo.links[key][linkId].click ? this.LinkInfo.links[key][linkId].click : 0;
-                    list.links.push(this.LinkInfo.links[key][linkId]);
+                for(let linkId in this.LinkData[key]){
+                    list.clicks += this.LinkData[key][linkId].click ? this.LinkData[key][linkId].click : 0;
+                    list.links.push(this.LinkData[key][linkId]);
                 }
                 list.links.sort((a,b)=>{
                     let aClick = a.click?a.click:0;
@@ -134,6 +135,7 @@ export default {
         }
     },
     methods:{
+        ...mapActions(['addLinkItem','deleteLinkItem','updateLinkItem']),
         changeIcon(url){
             this.editData.icon = url?url:"";
             this.showIconSelect = false;
@@ -143,25 +145,24 @@ export default {
             console.log("search");
             this.inputContent = "";
         },
-        addLink(){
+        handleAdd(){
             let linkId = 'link'+new Date().getTime();
             let inputArr = this.inputContent.split(' ');
             let listId = inputArr[2]?inputArr[2]:'未分类';
-            this.$store.dispatch('addLink',{listId,linkId,link:{
+            this.addLinkItem({listId,linkId,link:{
                     id:linkId,
                     listName:listId,
                     name:inputArr[1]?inputArr[1]:inputArr[0],
                     icon:"",
-                    linkTo:this.inputArr[0],
+                    linkTo:inputArr[0],
                     click:0
                 },$bus:this.$bus});
             this.inputContent = "";
-            console.log("addLink");
         },
         editLink(listId,linkId){
             this.editListId = listId;
             this.editLinkId = linkId;
-            this.editData = JSON.parse(JSON.stringify(this.$store.state.LinkInfo.links[listId][linkId]));
+            this.editData = JSON.parse(JSON.stringify(this.LinkData[listId][linkId]));
             this.isEdit = true;
         },
         deleteLink(){
@@ -170,7 +171,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$store.dispatch('deleteLink',{listId:this.editListId,linkId:this.editLinkId});
+                this.deleteLinkItem({listId:this.editListId,linkId:this.editLinkId});
                 this.isEdit = false;
                 this.$message({
                     type: 'success',
@@ -184,7 +185,7 @@ export default {
             });
         },
         saveLink(){
-            this.$store.dispatch('saveLink',{listId:this.editListId,link:this.editData});
+            this.updateLinkItem({listId:this.editListId,link:this.editData});
             this.$message({
                 type: 'success',
                 message: '保存成功!'
@@ -192,7 +193,7 @@ export default {
             this.isEdit = false;
         },
         checkLogin(){
-            if(!this.$store.state.AppInfo.isLogin){
+            if(!this.isLogin){
                 this.$router.replace({
                     path: '/Login',
                 })
@@ -206,8 +207,6 @@ export default {
     },
     mounted(){
         this.checkLogin();
-        this.LinkInfo = this.$store.state.LinkInfo;
-        this.$store.dispatch('getLinkData');
     }
 }
 </script>

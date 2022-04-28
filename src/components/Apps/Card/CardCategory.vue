@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div @click="addCategory" class="addCategory card" title="添加分类">+</div>
+    <div @click="handleAdd" class="addCategory card" title="添加分类">+</div>
     <CategoryList :editCategory="editCategory" v-for="(category,bid) in this.categories" :key="bid" :category="category" :bid="bid"></CategoryList>
     <el-dialog @close="closeDialog" class="categoryEdit" title="分类信息" :visible="isEditCategory || isCreateCategory">
       <div class="container">
@@ -16,7 +16,7 @@
         </div>
         <div class="title">
           <el-button @click="cancelEdit">取消</el-button>
-          <el-button @click="updateCategory">保存</el-button>
+          <el-button @click="handleSave">保存</el-button>
         </div>
       </div>
     </el-dialog>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import CategoryList from './CategoryList.vue'
 export default {
   data(){
@@ -31,18 +32,25 @@ export default {
       isEditCategory: false,
       isCreateCategory: false,
       activeCategory: {},
-      categories:{},
+      // categories:{},
+    }
+  },
+  computed:{
+    ...mapGetters(['CardData']),
+    categories(){
+      return this.CardData.categories?this.CardData.categories:{};
     }
   },
   components:{
     CategoryList
   },
   methods:{
+    ...mapActions(['updateCategory','addCategory']),
     closeDialog(){
       this.isEditCategory = false;
       this.isCreateCategory = false;
     },
-    addCategory(){
+    handleAdd(){
       this.activeCategory = {
         id: "Category"+new Date().getTime(),
         cards:[],
@@ -55,12 +63,12 @@ export default {
       this.activeCategory = JSON.parse(JSON.stringify(category));
       this.isEditCategory = true;
     },
-    updateCategory(){
+    handleSave(){
       if(this.isEditCategory){
-        this.$store.dispatch("updateCategory",JSON.parse(JSON.stringify(this.activeCategory)));
+        this.updateCategory(JSON.parse(JSON.stringify(this.activeCategory)));
         this.isEditCategory = false;
       }else if(this.isCreateCategory){
-        this.$store.dispatch("addCategory",JSON.parse(JSON.stringify(this.activeCategory)));
+        this.addCategory(JSON.parse(JSON.stringify(this.activeCategory)));
         this.isCreateCategory = false;
       }
     },
@@ -71,10 +79,6 @@ export default {
     }
   },
   mounted(){
-    this.categories = this.$store.state.CardInfo.categories;
-    this.$bus.$on("onCardDataLoad",()=>{
-      this.categories = this.$store.state.CardInfo.categories;
-    });
   }
 }
 </script>

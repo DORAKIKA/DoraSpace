@@ -4,7 +4,7 @@
             <div class="header">
                 <el-button plain type="info" class="back" @click="back">back</el-button>
                 <el-button :disabled="!isChange" type="success" @click="saveCard">保存</el-button>
-                <el-button type="danger" @click="deleteCard">删除</el-button>
+                <el-button type="danger" @click="handleDelete">删除</el-button>
             </div>
             <div class="meta">
                 <div class="metaItem title"><span class="key">标题</span><el-input @change="formChange" class="value" v-model="cardInfo.title"></el-input></div>
@@ -65,6 +65,7 @@
 
 <script>
 import "vditor/dist/index.css"
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     data(){
@@ -80,19 +81,23 @@ export default {
             categories:{}
         }
     },
+    computed:{
+        ...mapGetters(['CardData']),
+    },
     methods:{
+        ...mapActions(['updateCardInfo','deleteCardInfo']),
         saveCard(){
-            this.$store.dispatch('saveCard',this.cardInfo);
+            this.updateCardInfo(this.cardInfo);
             //应该在保存成功之后再改
             this.isChange = false;
         },
-        deleteCard(){
+        handleDelete(){
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                 confirmButtonText: '删除',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$store.dispatch('deleteCard',this.cardInfo);
+                this.deleteCardInfo(this.cardInfo);
                 this.$message({
                     type: 'success',
                     message: '删除成功!'
@@ -128,11 +133,11 @@ export default {
             this.formChange();
         },
         initCardInfo(cid){
-            if(this.$store.state.CardInfo.cards[cid]){
+            if(this.CardData.cards[cid]){
                 this.isCidGet = true;
             }
-            this.cardInfo = this.$store.state.CardInfo.cards[cid]?JSON.parse(JSON.stringify(this.$store.state.CardInfo.cards[cid])):{content:""};
-            this.categories = JSON.parse(JSON.stringify(this.$store.state.CardInfo.categories));
+            this.cardInfo = this.CardData.cards[cid]?JSON.parse(JSON.stringify(this.CardData.cards[cid])):{content:""};
+            this.categories = JSON.parse(JSON.stringify(this.CardData.categories));
             this.isChange=false;
         },
         formChange(){
@@ -142,9 +147,6 @@ export default {
     mounted(){
         this.cid = this.$route.query.cid;
         this.initCardInfo(this.cid);
-        this.$bus.$on('onCardDataLoad',()=>{
-            this.initCardInfo(this.cid);
-        })
     }
 }
 </script>

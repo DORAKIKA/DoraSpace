@@ -3,10 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-import CardInfo from './CardInfo';
-import LinkInfo from './LinkInfo';
 import AppInfo from './AppInfo';
-import DiaryInfo from './DiaryInfo';
 
 import state from './state';
 import * as actions from './actions'
@@ -23,8 +20,5 @@ export default new Vuex.Store({
     mutations,
     modules:{
         AppInfo,
-        CardInfo,
-        LinkInfo,
-        DiaryInfo
     }
 });

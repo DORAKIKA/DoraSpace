@@ -16,15 +16,14 @@
             <i :class="item.icon"></i>
         </router-link>
     </el-tooltip>
-      <!-- <button class="nav-button" @click="toggleNav"><i class="iconfont icon-gouwudai"></i></button> -->
-    <div class="nav-item" @click="$store.commit('ToggleDark')">
+    <div class="nav-item" @click="switchDarkMode">
         <i class="iconfont icon-zhouyeliangduxuanze"></i>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
     data(){
         return{
@@ -32,12 +31,12 @@ export default {
         }
     },
     computed:{
-        ...mapState(['AppInfo']),
+        ...mapGetters(['config']),
         filterNavs(){
             let navs = [];
-            for(let name in this.AppInfo.config.Nav){
-                if(this.AppInfo.config.Nav[name].show){
-                    navs.push(this.AppInfo.config.Nav[name]);
+            for(let name in this.config.Nav){
+                if(this.config.Nav[name].show){
+                    navs.push(this.config.Nav[name]);
                 }
             }
             return navs;
@@ -62,6 +61,7 @@ export default {
                 }
             }
         },
+        ...mapActions(['switchDarkMode']),
     },
     mounted(){
         window.addEventListener('keydown',this.changePage)

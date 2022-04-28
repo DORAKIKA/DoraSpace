@@ -20,6 +20,7 @@ import CardSetting from './Setting/CardSetting.vue';
 import PanelSetting from './Setting/PanelSetting.vue';
 import LinkSetting from './Setting/LinkSetting.vue';
 import DiaryInfo from './Setting/DiarySetting.vue';
+import {setLocalConfig} from '@/utils/storage';
 export default {
   data() {
     return {
@@ -28,7 +29,7 @@ export default {
     }
   },
   computed:{
-      ...mapState(['AppInfo'])
+      ...mapState(['isLogin','config'])
   },
   components:{
     MainSetting,
@@ -39,10 +40,11 @@ export default {
   },
   methods: {
     saveSetting(){
-      this.$store.dispatch("uploadConfig");
+      setLocalConfig(JSON.stringify(this.config));
+      this.$message.success('保存成功')
     },
     checkLogin(){
-      if(!this.$store.state.AppInfo.isLogin){
+      if(!this.isLogin){
         this.$router.replace({
           path: '/Login',
         })

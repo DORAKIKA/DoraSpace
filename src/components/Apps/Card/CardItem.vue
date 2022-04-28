@@ -4,18 +4,19 @@
       <div class="tags">
           <span v-for="tag in cardInfo.tags" :key="tag" class="tagItem">{{tag}}</span>
       </div>
-      <!-- <div class="process">
-          <el-progress :percentage="cardInfo.process"></el-progress>
-      </div> -->
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
     data(){
         return {
             cardInfo:{},
         }
+    },
+    computed:{
+        ...mapGetters(['CardData']),
     },
     methods:{
         toCardInfo(cid){
@@ -24,12 +25,11 @@ export default {
             })
         },
         initCardInfo(cid){
-            this.cardInfo = this.$store.state.CardInfo.cards[cid]?this.$store.state.CardInfo.cards[cid]:{};
+            this.cardInfo = this.CardData.cards[cid]?this.CardData.cards[cid]:{};
         }
     },
     mounted(){
         this.initCardInfo(this.cid);
-        this.$bus.$on("onCardDataLoad",()=>{this.initCardInfo(this.cid)})
     },
     props:['cid']
 }
