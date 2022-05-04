@@ -114,9 +114,9 @@ export default {
         this.$bus.$on('onDiaryDataLoad',this.setEmojiData);
     },
     beforeDestroy(){
-        if(this.emojiChart){
-            this.emojiChart.dispose();
-        }
+        // if(this.emojiChart){
+        //     this.emojiChart.dispose();
+        // }
         this.$bus.$off('onDiaryDataLoad',this.setEmojiData);
     }
 }

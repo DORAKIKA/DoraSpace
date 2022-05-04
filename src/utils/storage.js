@@ -3,9 +3,9 @@ import {config} from '@/config'
 
 const _storage = window.localStorage
 const storage = {
-  get(key) {
+  get(key,val) {
     if (_storage) {
-      return _storage.getItem(key);
+      return _storage.getItem(key) ? _storage.getItem(key) : val;
     }
   },
   set(key, val) {
@@ -37,7 +37,6 @@ export function setDarkMode(mode) {
 
 /**
  * 配置信息
- * @type CONFIG_KEY
  */
 const CONFIG_KEY = 'CONFIG_KEY';
 export function getLocalConfig(){
@@ -46,4 +45,16 @@ export function getLocalConfig(){
 export function setLocalConfig(config){
   storage.set(CONFIG_KEY,config);
   return config;
+}
+
+/**
+ * TaskDoing
+ */
+const TASK_KEY = 'TASK_KEY';
+export function getTaskTimer(){
+  return storage.get(TASK_KEY,JSON.stringify({startTime: '',taskId: '',}));
+}
+export function setTaskTimer(TaskTimer){
+  storage.set(TASK_KEY,TaskTimer);
+  return TaskTimer;
 }

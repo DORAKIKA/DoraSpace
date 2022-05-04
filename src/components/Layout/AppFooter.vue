@@ -15,8 +15,8 @@ export default {
     width: 100%;
     margin-top: 1rem;
     padding: 1rem;
-    background: var(--card-inner);
-    opacity: 0.7;
+    height: 3rem;
+    background: var(--card-white);
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

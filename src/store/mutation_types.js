@@ -21,6 +21,11 @@ const types = {
 
     ADD_DIARY_ITEM: 'ADD_DIARY_ITEM',   //添加日记
     DELETE_DIARY_ITEM: 'DELETE_DIARY_ITEM', //删除日记
+
+    ADD_TASK_HISTORY: 'ADD_TASK_HISTORY',   //添加任务记录
+    DELETE_TASK_HISTORY: 'DELETE_TASK_HISTORY', //删除任务记录
+    ADD_TASK_PRESET: 'ADD_TASK_PRESET', //添加任务预设
+    DELETE_TASK_PRESET: 'DELETE_TASK_PRESET',   //删除任务预设
     
 
 

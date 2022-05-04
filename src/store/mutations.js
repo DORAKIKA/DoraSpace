@@ -6,7 +6,11 @@ const mutations = {
     [types.SET_CONFIG](state,value){
         state.config = {
             ...state.config,
-            ...value
+            ...value,
+            Nav: {
+                ...state.config.Nav,
+                ...value.Nav
+            },
         }
 
     },
@@ -145,6 +149,31 @@ const mutations = {
                 Vue.delete(state.DiaryData.diaries,i);
                 break;
             }
+        }
+    },
+
+    //Task操作
+    //添加任务记录
+    [types.ADD_TASK_HISTORY](state,{id,history}){
+        console.log(id)
+        if(!state.TodoData.history[id].history) Vue.set(state.TodoData.history[id],'history',{});
+        Vue.set(state.TodoData.history[id].history,history.id,history);
+    },
+    [types.DELETE_TASK_HISTORY](state,{id,hid}){
+        for(let key in state.TodoData.history){
+            if(key === id){
+                Vue.delete(state.TodoData.history[id].history,hid);
+            }
+        }
+    },
+    [types.ADD_TASK_PRESET](state,preset){
+        Vue.set(state.TodoData.presets,preset.id,preset);
+        Vue.set(state.TodoData.history,preset.id,{...preset,history:{}})
+    },
+    [types.DELETE_TASK_PRESET](state,preset){
+        Vue.delete(state.TodoData.presets,preset.id);
+        if(!Object.keys(state.TodoData.history[preset.id].history)){
+            Vue.delete(state.TodoData.history,preset.id);
         }
     }
 

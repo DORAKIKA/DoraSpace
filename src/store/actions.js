@@ -52,16 +52,20 @@ export const uploadAppData = function({state}){
         DIARY_DATA: state.DiaryData,
         SETTING_DATA: state.SettingData
     });
-    axios
-      .put(`${state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/AppData.json`, {
-        data,
+    var config = {
+        method: 'put',
+        url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/AppData.json`,
         headers: { 
             'Authorization': `Basic ${userAuth}`, 
             'Content-Type': 'application/json'
         },
-      }).then(
-          res=>console.log(res)
-      )
+        data : data
+    };
+    axios(config).then(function (response) {
+        console.log(JSON.stringify(response.data));
+    }).catch(function (error) {
+        console.log(error);
+    });
 }
 //获取CONFIG
 export const getConfig = function({commit}){
@@ -72,20 +76,23 @@ export const getConfig = function({commit}){
 
 // -----------------Card
 //更新目录
-export const updateCategory = function({commit},value){
+export const updateCategory = function({commit,dispatch},value){
     commit(types.UPDATE_CARD_CATEGORY,value);
+    dispatch('uploadAppData');
 }
 //添加目录
-export const addCategory = function({commit},value){
+export const addCategory = function({commit,dispatch},value){
     console.log(value)
     commit(types.UPDATE_CARD_CATEGORY,value);
+    dispatch('uploadAppData');
 }
 //删除目录
-export const deleteCategory = function({commit},bid){
+export const deleteCategory = function({commit,dispatch},bid){
     commit(types.DELETE_CARD_CATEGORY,bid)
+    dispatch('uploadAppData');
 }
 //添加卡片
-export const addCard = function({commit},bid){
+export const addCard = function({commit,dispatch},bid){
     //在category中生成cardid
     let cid = 'card'+new Date().getTime();
     //向cards中添加一个模板card
@@ -99,39 +106,64 @@ export const addCard = function({commit},bid){
         content: "write something here!"
     }
     commit(types.ADD_CARD_INFO,card);
+    dispatch('uploadAppData');
 }
 //更新卡片信息
-export const updateCardInfo = function({commit},cardInfo){
+export const updateCardInfo = function({commit,dispatch},cardInfo){
     commit(types.UPDATE_CARD_INFO,cardInfo);
+    dispatch('uploadAppData');
 }
 //删除卡片
-export const deleteCardInfo = function({commit},cardInfo){
+export const deleteCardInfo = function({commit,dispatch},cardInfo){
     commit(types.DELETE_CARD_INFO,cardInfo);
+    dispatch('uploadAppData');
 }
 
 
 //-----Link
 //添加Link链接
-export const addLinkItem = function({commit},opt){
+export const addLinkItem = function({commit,dispatch},opt){
     commit(types.ADD_LINK_ITEM,opt);
+    dispatch('uploadAppData');
 }
 //删除Link链接
-export const deleteLinkItem = function({commit},opt){
+export const deleteLinkItem = function({commit,dispatch},opt){
     commit(types.DELETE_LINK_ITEM,opt);
+    dispatch('uploadAppData');
 }
 //更新Link链接
-export const updateLinkItem = function({commit},opt){
+export const updateLinkItem = function({commit,dispatch},opt){
     commit(types.DELETE_LINK_ITEM,{listId:opt.listId,linkId:opt.link.id});
     commit(types.ADD_LINK_ITEM,{listId:opt.link.listName,linkId:opt.link.id,link:opt.link});
+    dispatch('uploadAppData');
 }
 
 
 //------Diary
 //添加Diary日记
-export const addDiaryItem = function({commit},value){
+export const addDiaryItem = function({commit,dispatch},value){
     commit(types.ADD_DIARY_ITEM,value);
+    dispatch('uploadAppData');
 }
 //删除Diary日记
-export const deleteDiaryItem = function({commit},value){
+export const deleteDiaryItem = function({commit,dispatch},value){
     commit(types.DELETE_DIARY_ITEM,value);
+    dispatch('uploadAppData');
+}
+
+
+//----task
+//添加任务历史
+export const addTaskHistory = function({commit},value){
+    commit(types.ADD_TASK_HISTORY,value);
+}
+//删除任务历史
+export const deleteTaskHistory = function({commit},value){
+    commit(types.DELETE_TASK_HISTORY,value);
+}
+export const addTaskPreset = function({commit},value){
+    commit(types.ADD_TASK_PRESET,value);
+}
+export const deleteTaskPreset = function({commit},value){
+    commit(types.DELETE_TASK_PRESET,value);
 }

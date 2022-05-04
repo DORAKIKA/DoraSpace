@@ -10,7 +10,7 @@ export const isLogin = state => state.isLogin;
 
 //DIARY INFO
 //默认表情
-export const diaryEmojis = state=>state.DiaryInfo.emojis;
+export const diaryEmojis = state=>state.DiaryData.emojis;
 
 
 //获取Card数据
@@ -19,3 +19,5 @@ export const CardData = state => state.CardData;
 export const LinkData = state => state.LinkData;
 //获取Diary数据
 export const DiaryData = state => state.DiaryData;
+//获取TODO数据
+export const TodoData = state => state.TodoData;

@@ -17,7 +17,7 @@ computed:{
 watch:{
     LinkData:function(){
         console.log(1)
-        this.getTop10()
+        this.getTop10();
     }
 },
 methods:{
@@ -75,7 +75,9 @@ methods:{
         return null;
     },
     resize(){
-        this.linkChart.resize();
+        if(this.linkChart.resize){
+            this.linkChart.resize();
+        }
     }
 
 },
@@ -83,11 +85,14 @@ mounted(){
     window.addEventListener('resize',this.resize);
     this.getTop10();
 },
+created(){
+    setTimeout(this.resize,1000);
+},
 beforeDestroy(){
-    if(this.linkChart){
-        this.linkChart.dispose();
-        this.linkChart = undefined;
-    }
+    // if(this.linkChart){
+    //     this.linkChart.dispose();
+    //     this.linkChart = undefined;
+    // }
     window.removeEventListener('resize',this.resize);
 }
 }

@@ -7,6 +7,8 @@
     --card-inner: #f1f4f9;
     --card-shadow: #999999;
     --font-color: #333;
+    --font-color2: #666;
+    --opacity-over: rgba(0,0,0,0.2);
   
     --over90: rgba(255,255,255,0.9);
     --over80: rgba(255,255,255,0.8);
@@ -25,6 +27,8 @@
     --card-inner: #444;
     --card-shadow: #111111;
     --font-color: #eee;
+    --font-color2: #aaa;
+    --opacity-over: rgba(255,255,255,0.5);
   
     --over90: rgba(51,51,51,0.9);
     --over80: rgba(51,51,51,0.8);

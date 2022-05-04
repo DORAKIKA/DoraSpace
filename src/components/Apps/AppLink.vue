@@ -6,7 +6,7 @@
             <i @click="handleAdd" class="el-icon-circle-plus-outline"></i>
         </div>
         <div class="container">
-            <LinkNav v-if="this.$store.state.AppInfo.config.Link.showNav" :sortLinkInfo="sortLinkInfo"></LinkNav>
+            <LinkNav v-if="this.$store.state.config.Link.showNav" :sortLinkInfo="sortLinkInfo"></LinkNav>
             <div class="listBox card">
                 <div class="lists">
                     <LinkList

@@ -1,16 +1,20 @@
 <template>
   <div id="AppPanel">
     <div class="panelMain">
-      <Hitokoto v-if="config.Panel.showHitokoto" class="mainItem col12"></Hitokoto>
-      <!-- <WeatherPanel class="mainItem col2 row1"></WeatherPanel> -->
-      <div class="mainItem col3 row2">
-        <DiaryEmoji></DiaryEmoji>
-      </div>
-      <div class="mainItem col6 row6">
-        <LinkClickPanel v-if="config.Link.showLinkChart"></LinkClickPanel>
-      </div>
+      
+      <el-carousel :autoplay="false" height="100%" style="height:100%">
+        <el-carousel-item class="mainItem" v-if="config.Link.showLinkChart">
+          <LinkClickPanel></LinkClickPanel>
+        </el-carousel-item>
+        <el-carousel-item class="mainItem">
+          <DiaryEmoji></DiaryEmoji>
+        </el-carousel-item>
+      </el-carousel>
+
     </div>
     <div class="panelAside">
+      <Hitokoto v-if="config.Panel.showHitokoto" class="asideItem"></Hitokoto>
+
       <BilibiliHot v-if="config.Panel.showBilibiliHot" class="asideItem"></BilibiliHot>
       <WeiboHot v-if="config.Panel.showWeiboHot" class="asideItem"></WeiboHot>
       <ZhihuHot v-if="config.Panel.showZhihuHot" class="asideItem"></ZhihuHot>
@@ -32,6 +36,11 @@ import BilibiliHot from './Panel/BilibiliHot.vue'
 import WeiboHot from './Panel/WeiboHot.vue';
 import ZhihuHot from './Panel/ZhihuHot.vue';
 export default {
+  data(){
+    return {
+      currentPanel: ''
+    }
+  },
   computed:{
     ...mapState(['config','isLogin'])
   },
@@ -73,13 +82,7 @@ export default {
 }
 #AppPanel .panelMain{
   width: calc(100% - 350px - 1rem);
-  display: grid;
-  grid-template-columns: repeat(12,1fr);
-  grid-template-rows: repeat(auto-fill,3rem);
-  grid-row-gap: 1rem;
-  grid-column-gap: 1rem;
-  grid-auto-rows: 3rem;
-  grid-auto-columns: 1fr;
+  height: calc(100vh - 6rem);
 }
 #AppPanel .panelMain .mainItem{
   background: var(--card-white);
@@ -88,6 +91,8 @@ export default {
 
 #AppPanel .panelAside{
   width: 350px;
+  max-height: calc(100vh - 6rem);
+  overflow-y: scroll;
 }
 #AppPanel .panelAside .asideItem{
   background: var(--card-white);
@@ -109,39 +114,11 @@ export default {
   border: 1px solid var(--theme-color);
 }
 
-#AppPanel .mainItem.col12{
-  grid-column-start: span 12;
-}
-#AppPanel .mainItem.col6{
-  grid-column-start: span 6;
-}
-#AppPanel .mainItem.col4{
-  grid-column-start: span 4;
-}
-#AppPanel .mainItem.col3{
-  grid-column-start: span 3;
-}
-#AppPanel .mainItem.col2{
-  grid-column-start: span 2;
-}
-
-#AppPanel .mainItem.row6{
-  grid-row-start: span 6;
-}
-#AppPanel .mainItem.row4{
-  grid-row-start: span 4;
-}
-#AppPanel .mainItem.row2{
-  grid-row-start: span 2;
-}
-#AppPanel .mainItem.row1{
-  grid-row-start: span 1;
-}
 
 
 
 @media screen and (max-width:1200px) {
-  #AppPanel .mainItem.item50{
+  #AppPanel .mainItem{
     width: 100%;
   }
 }
@@ -152,32 +129,7 @@ export default {
   #AppPanel .panelAside{
     margin-top: 1rem;
     width: 100%;
-  }
-
-  #AppPanel .mainItem.col12{
-    grid-column-start: span 12;
-  }
-  #AppPanel .mainItem.col6{
-    grid-column-start: span 12;
-  }
-  #AppPanel .mainItem.col4{
-    grid-column-start: span 12;
-  }
-  #AppPanel .mainItem.col3{
-    grid-column-start: span 6;
-  }
-  #AppPanel .mainItem.col2{
-    grid-column-start: span 4;
-  }
-
-  #AppPanel .mainItem.row6{
-    grid-row-start: span 6;
-  }
-  #AppPanel .mainItem.row4{
-    grid-row-start: span 4;
-  }
-  #AppPanel .mainItem.row2{
-    grid-row-start: span 2;
+    height: fit-content;
   }
 
 }
