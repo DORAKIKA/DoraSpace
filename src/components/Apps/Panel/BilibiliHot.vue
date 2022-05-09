@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 const http = require('../../../http/index').default;
 export default {
     data(){
@@ -18,9 +19,10 @@ export default {
         }
     },
     computed:{
+        ...mapState(['https'])
     },
     mounted(){
-        http.get(`http://api.dorakika.cn/bilibili/hot`).then((res)=>{
+        http.get(`${this.https}://api.dorakika.cn/bilibili/hot`).then((res)=>{
             this.data = res.data.result.list.splice(0,10);
         },error=>{
             console.log(error);
