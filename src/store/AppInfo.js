@@ -30,7 +30,7 @@ export default {
                             path: '/Panel',
                         })
                     }
-                    app.$bus.$emit('onLogin');
+                    context.dispatch("getAppData");
                 }else if(response.data.status === 0){
                     context.state.isLogin = false;
                     

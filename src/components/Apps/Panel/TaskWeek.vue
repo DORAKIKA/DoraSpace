@@ -43,7 +43,6 @@ methods:{
             }
             for(let tk in h){
                 let index = ((now+24*60*60*1000-h[tk].endTime)/(24*60*60*1000))<<0;
-                console.log(index);
                 if(index > 6) continue;
                 data.data[6-index] += ((h[tk].endTime - h[tk].startTime)/60000)<<0;
             }
