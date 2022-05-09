@@ -6,28 +6,25 @@
 import { mapGetters } from 'vuex'
 export default {
     computed:{
-        ...mapGetters(['customStyle'])
+        ...mapGetters(['customStyle']),
+    },
+    watch:{
+        customStyle(){
+            this.setCustomStyle();
+        }
     },
     methods:{
-        updateStyle(){
-            let dom = document.getElementById('AppStyle');
-            if(dom){
-                dom.innerHTML = `
+        setCustomStyle(){
+            let style = document.getElementById('AppStyle');
+            style.innerHTML = `
                 <style>
                 ${this.customStyle}
                 </style>
                 `
-            }
         }
     },
     mounted(){
-        this.$bus.$on('onCustomStyleLoad',this.updateStyle);
-        this.$bus.$on('onLogin',()=>{
-            this.$store.dispatch('getCustomStyle');
-        })
-        this.$store.dispatch('getCustomStyle');
-        window.addEventListener('load',this.updateStyle);
-        this.updateStyle();
+        this.setCustomStyle();
     }
 }
 </script>

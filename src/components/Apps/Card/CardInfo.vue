@@ -2,9 +2,9 @@
     <div id="cardInfo">
         <div class="left" v-show="isCidGet">
             <div class="header">
-                <el-button plain type="info" class="back" @click="back">back</el-button>
-                <el-button :disabled="!isChange" type="success" @click="saveCard">保存</el-button>
-                <el-button type="danger" @click="handleDelete">删除</el-button>
+                <kk-button @click="back">back</kk-button>
+                <kk-button :disabled="!isChange" type="success" @click="saveCard">保存</kk-button>
+                <kk-button type="danger" @click="handleDelete">删除</kk-button>
             </div>
             <div class="meta">
                 <div class="metaItem title"><span class="key">标题</span><el-input @change="formChange" class="value" v-model="cardInfo.title"></el-input></div>
@@ -57,6 +57,7 @@
                 previewBackground="var(--card-white)"
                 codeStyle="monokai"
                 @change="formChange"
+                @save="saveCard"
             ></mavon-editor>
         </div>
         <div v-show="!isCidGet">当前卡片不存在</div>
@@ -66,6 +67,7 @@
 <script>
 import "vditor/dist/index.css"
 import { mapActions, mapGetters } from 'vuex';
+import kkButton from '@/kk/kk-button.vue';
 
 export default {
     data(){
@@ -81,6 +83,7 @@ export default {
             categories:{}
         }
     },
+    components:{kkButton},
     computed:{
         ...mapGetters(['CardData']),
     },
@@ -90,6 +93,7 @@ export default {
             this.updateCardInfo(this.cardInfo);
             //应该在保存成功之后再改
             this.isChange = false;
+            this.$message({message:"保存成功",type:"success"})
         },
         handleDelete(){
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

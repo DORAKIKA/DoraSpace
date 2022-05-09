@@ -23,19 +23,34 @@ const mutations = {
 
     //设置Card数据
     [types.SET_CARD_DATA](state,value){
-        state.CardData = value;
+        if(value)state.CardData = value;
     },
     //设置Link数据
     [types.SET_LINK_DATA](state,value){
-        state.LinkData = value;
+        if(value)state.LinkData = value;
     },
     //设置Diary数据
     [types.SET_DIARY_DATA](state,value){
-        state.DiaryData = value;
+        if(value)state.DiaryData = value;
     },
     //设置Setting数据
     [types.SET_SETTING_DATA](state,value){
-        state.SettingData = value;
+        if(value)state.SettingData = value;
+    },
+    //设置Task数据
+    [types.SET_TASK_DATA](state,value){
+        if(!value)return;
+        if(!value.history)return;
+        for(let key in value.history){
+            if(Object.keys(value.history[key].history).length===0 && !value.presets[key]){
+                Vue.delete(value.history,key);
+            }
+        }
+        
+        state.TaskData = value;
+    },
+    [types.SET_CUSTOM_STYLE](state,value){
+        state.customStyle = value;
     },
 
 
@@ -113,6 +128,9 @@ const mutations = {
             for(let i = 0; i < state.CardData.tags[tag].length;i++){
                 if(state.CardData.tags[tag][i] === value.cid){
                     state.CardData.tags[tag].splice(i,1);
+                    if(!state.CardData.tags[tag].length){
+                        Vue.delete(state.CardData.tags,tag);
+                    }
                     break;
                 }
             }
@@ -156,26 +174,27 @@ const mutations = {
     //添加任务记录
     [types.ADD_TASK_HISTORY](state,{id,history}){
         console.log(id)
-        if(!state.TodoData.history[id].history) Vue.set(state.TodoData.history[id],'history',{});
-        Vue.set(state.TodoData.history[id].history,history.id,history);
+        if(!state.TaskData.history[id].history) Vue.set(state.TaskData.history[id],'history',{});
+        Vue.set(state.TaskData.history[id].history,history.id,history);
     },
     [types.DELETE_TASK_HISTORY](state,{id,hid}){
-        for(let key in state.TodoData.history){
+        for(let key in state.TaskData.history){
             if(key === id){
-                Vue.delete(state.TodoData.history[id].history,hid);
+                Vue.delete(state.TaskData.history[id].history,hid);
             }
         }
     },
     [types.ADD_TASK_PRESET](state,preset){
-        Vue.set(state.TodoData.presets,preset.id,preset);
-        Vue.set(state.TodoData.history,preset.id,{...preset,history:{}})
+        Vue.set(state.TaskData.presets,preset.id,preset);
+        Vue.set(state.TaskData.history,preset.id,{...preset,history:{}})
     },
-    [types.DELETE_TASK_PRESET](state,preset){
-        Vue.delete(state.TodoData.presets,preset.id);
-        if(!Object.keys(state.TodoData.history[preset.id].history)){
-            Vue.delete(state.TodoData.history,preset.id);
+    [types.DELETE_TASK_PRESET](state,id){
+        Vue.delete(state.TaskData.presets,id);
+        if(!Object.keys(state.TaskData.history[id].history)){
+            Vue.delete(state.TaskData.history,id);
         }
-    }
+    },
+
 
 }
 export default mutations;

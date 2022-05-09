@@ -3,10 +3,10 @@
       <div class="titleBar">
         <div class="name">{{category.name}}</div>
         <div class="desc">{{category.desc}}</div>
-        <el-button @click="addCard(category.id)" type="primary" icon="el-icon-plus" circle></el-button>
-        <el-button @click="editCategory(category)" type="primary" icon="el-icon-edit" circle></el-button>
-        <el-button @click="toggleExtended" type="primary" icon="el-icon-arrow-down" circle></el-button>
-        <el-button @click="handleDelete(category.id)" type="danger" icon="el-icon-delete" circle></el-button>
+        <kk-button @click="addCard(category.id)" type="circle" size="mini" class="iconfont icon-jia"></kk-button>
+        <kk-button @click="editCategory(category)" type="circle" size="mini" class="iconfont icon-xiugai"></kk-button>
+        <kk-button @click="toggleExtended" type="circle" size="mini" class="iconfont icon-you"></kk-button>
+        <kk-button @click="handleDelete(category.id)" type="circle danger" size="mini" class="iconfont icon-shanchu"></kk-button>
       </div>
       <div class="list">
           <CardItem v-for="cid in category.cards" :key="cid" :cid="cid" :bid="bid"></CardItem>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import kkButton from '@/kk/kk-button.vue'
 import { mapActions, mapGetters } from 'vuex';
 import CardItem from './CardItem.vue'
 export default {
@@ -59,6 +60,7 @@ export default {
     },
     components:{
         CardItem,
+        kkButton,
     },
     mounted(){
         this.isFold = this.config.Card?!this.config.Card.categoryExtended:true;
@@ -78,9 +80,8 @@ export default {
     height: 4rem;
     overflow: hidden;
 }
-.fold .el-icon-arrow-down{
+.fold .icon-you{
     transform: rotate(90deg);
-    color: greenyellow;
 }
 .cardCategoryList>.titleBar{
     width: 100%;

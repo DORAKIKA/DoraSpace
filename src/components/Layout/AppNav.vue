@@ -1,22 +1,19 @@
 <template>
   <div id="nav">
-    <el-tooltip
-        :effect="$store.state.AppInfo.config.isDark?'light':'dark'"
-        placement="left"
-        :content="item.name"
-        v-for="item in this.filterNavs"
-        :key="item.id"
-    >
-        <router-link
-            class="nav-item"
-            :to="item.link"
-            active-class="active"
-            :data-index="item.id"
-            >
-            <i :class="item.icon"></i>
-        </router-link>
-    </el-tooltip>
-    <div class="nav-item" @click="switchDarkMode">
+      <div class="nav-items">
+            <router-link
+                v-for="item in this.filterNavs"
+                :key="item.id"
+                class="nav-item"
+                :to="item.link"
+                active-class="active"
+                :data-index="item.id"
+                >
+                <i :class="item.icon"></i>
+                <span>{{item.name}}</span>
+            </router-link>
+      </div>
+    <div class="nav-button" @click="switchDarkMode">
         <i class="iconfont icon-zhouyeliangduxuanze"></i>
     </div>
   </div>
@@ -43,8 +40,8 @@ export default {
         }
     },
     methods:{
-        toggleNav(){
-            this.showNavItem = !this.showNavItem;
+        handleToggle(){
+            this.hide = !this.hide;
         },
         go(url){
             if(this.$router.currentRoute.path !== url){
@@ -71,29 +68,38 @@ export default {
 
 <style>
 #nav{
-    width: 4rem;
+    width: 68px;
     display: flex;
     flex-direction: column;
     align-items: center;
     z-index: 100;
     background: var(--card-white);
     border-right: 1px solid var(--bg);
-    overflow: scroll;
+    /* position: relative; */
+    transition: 0.3s;
 }
-#nav::-webkit-scrollbar{
+#nav .nav-items::-webkit-scrollbar{
     width: 0;
     height: 0;
 }
+#nav .nav-items{
+    overflow-y: scroll;
+    width: 58px;
+}
 #nav .nav-item{
     display: block;
-    min-width: 3rem;
-    height: 3rem;
+    min-width: 58px;
+    width: 58px;
+    height: 58px;
     margin: 1rem 0 0;
     color: var(--font-color);
     line-height: 3rem;
     text-align: center;
     border-radius: 0.5rem;
     transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 #nav .nav-item:hover{
     color: var(--theme-color);
@@ -105,11 +111,40 @@ export default {
     color: #fff;
 }
 #nav .nav-item i{
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 34px;
     font-size: 1.2rem;
 }
+#nav .nav-item span{
+    display: inline-block;
+    height: 26px;
+    line-height: 26px;
+    font-size: 12px;
+}
+
+#nav .nav-button{
+    display: block;
+    min-width: 58px;
+    width: 58px;
+    height: 58px;
+    margin: 1rem 0 0;
+    color: var(--font-color);
+    line-height: 58px;
+    text-align: center;
+    border-radius: 0.5rem;
+    transition: 0.3s;
+    font-size: 1.2rem;
+}
+#nav .nav-button:hover{
+    color: var(--theme-color);
+    background: var(--card-inner);
+}
+
 
 @media screen and (max-width:900px) {
-  #nav{
+  /* #nav{
       width: 100%;
       justify-content: flex-start;
       flex-direction: row;
@@ -117,7 +152,7 @@ export default {
   }
   #nav .nav-item{
       margin: 0.5rem;
-  }
+  } */
 }
 
 .float-enter,

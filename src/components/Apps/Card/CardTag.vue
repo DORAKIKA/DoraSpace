@@ -86,4 +86,7 @@ export default {
 #CardTag .tag:hover{
   box-shadow: 0 0 0 2rem rgba(255, 255, 255, 0.6) inset;
 }
+#CardTag .tagCards{
+  display: flex;
+}
 </style>

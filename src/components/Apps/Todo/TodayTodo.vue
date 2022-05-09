@@ -4,7 +4,7 @@
       <div class="time" :class="TaskTimer.taskId?'active':''">{{time}}</div>
     </div>
     <div class="today-presets">
-      <div @click="handlePreset(preset.id)" class="preset" :style="`background:${preset.color}`" v-for="preset in TodoData.presets" :key="preset.id">
+      <div @click="handlePreset(preset.id)" class="preset" :style="`background:${preset.color}`" v-for="preset in TaskData.presets" :key="preset.id">
         {{preset.content}}
       </div>
       <div class="addPreset" @click="handleAdd">
@@ -13,7 +13,7 @@
       <el-dialog
         title="提示"
         :visible.sync="addPresetVisible"
-        width="30%"
+        width="300px"
         :before-close="handleAddClose">
         <div class="addPresetForm">
           <div class="title">标题</div>
@@ -25,7 +25,7 @@
         </div>
         <div class="addPresetForm">
           <div class="title">时长(min)</div>
-          <el-input-number v-model="input.onceTime" :step="5" :max="120"></el-input-number>
+          <el-input-number v-model="input.onceTime" :step="5" :min="5" :max="120"></el-input-number>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addPresetVisible = false">取 消</el-button>
@@ -37,7 +37,8 @@
       <div class="detail" :style="`background:${currentTask.color ? currentTask.color : ''}`">
         <div class="bg" :style="`width:${TaskTimer.progress}%;display:${currentDoing.id&&currentDoing.id===currentTask.id?'block':'none'}`"></div>
         <div class="content">{{currentTask.content ? currentTask.content : ''}}</div>
-        <div class="start" @click="handleStart(currentTask.id)"><i class="iconfont" :class="currentDoing.id&&currentDoing.id===currentTask.id?'icon-zanting':'icon-bofang'"></i></div>
+        <kk-button class="preset-details-button" @click="handleDeletePresest"><i class="iconfont icon-shanchu"></i></kk-button>
+        <kk-button class="preset-details-button start" @click="handleStart(currentTask.id)"><i class="iconfont" :class="currentDoing.id&&currentDoing.id===currentTask.id?'icon-zanting':'icon-bofang'"></i></kk-button>
       </div>
       <div class="timelist">
           <div class="timeLineItem" v-for="timeNode in currentTask.history" :key="timeNode.id">
@@ -60,9 +61,11 @@
 </template>
 
 <script>
+import kkButton from '@/kk/kk-button.vue'
 import {getTaskTimer,setTaskTimer} from '@/utils/storage';
 import { mapActions, mapGetters } from 'vuex';
 export default {
+  components:{kkButton},
   data(){
     return{
       doing: false,
@@ -80,16 +83,35 @@ export default {
         title: 'test',
         color: '#386ade',
         onceTime: 0,
-      }
+      },
     }
   },
   computed:{
-    ...mapGetters(['TodoData']),
+    ...mapGetters(['TaskData']),
   },
   methods:{
     ...mapActions(['addTaskHistory','deleteTaskHistory','addTaskPreset','deleteTaskPreset']),
     handleAdd(){
       this.addPresetVisible = !this.addPresetVisible;
+    },
+    handleDeletePresest(){
+      if(this.currentTask.id){
+        this.$confirm("是否删除此预设？","提示").then(()=>{
+          this.TaskTimer = {
+            startTime: '',
+            taskId: '',
+            progress: '0'
+          }
+          if(this.timer){
+            clearInterval(this.timer);
+            this.timer = undefined;
+          }
+          this.currentDoing = {};
+          setTaskTimer(JSON.stringify(this.TaskTimer));
+          if(this.currentTask.id)this.deleteTaskPreset(this.currentTask.id);
+          this.currentTask = {};
+        })
+      }
     },
     handleAddConfirm(){
       let preset = {
@@ -107,17 +129,22 @@ export default {
     taskTimerFunc(){
       this.time = this.getTimeText();
       let now = new Date().getTime();
-      this.TaskTimer.progress = 100*(now - this.TaskTimer.startTime)/this.TodoData.history[this.TaskTimer.taskId].onceTime;
+      this.TaskTimer.progress = 100*(now - this.TaskTimer.startTime)/this.TaskData.history[this.TaskTimer.taskId].onceTime;
       if(this.TaskTimer.progress >= 100){
         this.pauseTimer();
         clearInterval(this.timer)
       }
     },
     handleDelete(hid){
-      this.deleteTaskHistory({id:this.currentTask.id,hid:hid});
+      this.$confirm("是否确认删除","提示").then(()=>{
+        this.deleteTaskHistory({id:this.currentTask.id,hid:hid});
+        this.$message("删除成功")
+      },()=>{
+        this.$message("取消");
+      })
     },
     handlePreset(id){
-      this.currentTask = this.TodoData.history[id];
+      this.currentTask = this.TaskData.history[id];
     },
     async handleStart(id){
       if(!id) return;
@@ -217,13 +244,13 @@ export default {
       if(!this.timer){
         this.timer = setInterval(this.taskTimerFunc,500)
       }
-      this.currentDoing = this.TodoData.history[id];
+      this.currentDoing = this.TaskData.history[id];
       setTaskTimer(JSON.stringify(this.TaskTimer));
     },
     getTimeText(pure=false){
       let now = new Date().getTime();
       let progress = now - this.TaskTimer.startTime;
-      if(!pure)progress = this.TodoData.history[this.TaskTimer.taskId].onceTime - progress;
+      if(!pure)progress = this.TaskData.history[this.TaskTimer.taskId].onceTime - progress;
       let min = (((progress / 1000)<<0) / 60)<<0;
       min  = min >= 0 ? min : 0;
       let second = ((progress / 1000)<<0) % 60;
@@ -244,7 +271,7 @@ export default {
   mounted(){
     this.TaskTimer = JSON.parse(getTaskTimer());
     if(this.TaskTimer.taskId){
-      this.currentDoing = this.TodoData.history[this.TaskTimer.taskId];
+      this.currentDoing = this.TaskData.history[this.TaskTimer.taskId];
       this.currentTask = this.currentDoing;
       
       if(!this.timer){
@@ -317,7 +344,7 @@ export default {
 }
 .today-todo .today-presets .preset:hover,
 .today-todo .today-presets .addPreset:hover{
-  box-shadow: 0 0 0 4px var(--font-color);
+  box-shadow: 0 0 0 4px var(--opacity-over);
 }
  .today-todo .today-presets .addPresetForm{
    margin-bottom: 4px;
@@ -349,6 +376,7 @@ export default {
   border-radius: 8px;
   margin-bottom: 2rem;
   position: relative;
+  overflow: hidden;
 }
 .today-todo .preset-details .detail .bg{
   background: var(--over50);
@@ -368,16 +396,23 @@ export default {
 .today-todo .preset-details .detail .content{
   flex: 1;
 }
-.today-todo .preset-details .detail .start{
+.today-todo .preset-details .detail .preset-details-button{
   width: 3rem;
-  background: var(--card-white);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 8px;
+  margin-left: 4px;
+  cursor: pointer;
+  color: var(--card-white);
+}
+.today-todo .preset-details .detail .preset-details-button:hover{
+  background: rgba(255, 255, 255, 0.9);
 }
 .today-todo .preset-details .timelist{
   flex: 1;
   border-radius: 8px;
   /* background: var(--card-inner);  */
   padding: 1rem;
+  overflow-y: scroll;
 }
 
 
@@ -478,4 +513,17 @@ export default {
     color: currentColor;
 }
 
+@media screen and (max-width: 900px) {
+  .today-todo{
+    height: max-content;
+  }
+  .today-todo .today-doing,
+  .today-todo .today-presets,
+  .today-todo .preset-details{
+    width: 100%;
+  }
+  .today-todo .preset-details{
+    margin: 1rem 0 0 0;
+  }
+}
 </style>

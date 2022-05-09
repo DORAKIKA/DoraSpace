@@ -15,6 +15,6 @@ const state = {
         emojis:'😁,🥰,🥳;😑,🙄,😪,🤒,😕;🤢,😭,😞,😡,🤡',
     },
     SettingData:{},
-    TodoData:DefaultTodo,
+    TaskData:DefaultTodo,
 }
 export default state;

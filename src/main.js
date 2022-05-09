@@ -9,6 +9,8 @@ import {VueJsonp} from 'vue-jsonp';
 
 import store from './store/index';
 
+// import kkMessage from '@/kk/tip/';
+
 
 import './style/index.css';
 
@@ -24,6 +26,11 @@ Vue.use(Router);
 Vue.use(store)
 Vue.use(mavonEditor);
 Vue.use(VueJsonp);
+
+
+// Vue.use(kkMessage)
+
+
 
 new Vue({
   //将App组件放入容器中

@@ -240,7 +240,8 @@ export default {
 #AppDiary .diaryEditor .el-textarea textarea{
     height: 100%;
     background: var(--card-inner);
-    border: 1px solid var(--card-inner)
+    border: 1px solid var(--card-inner);
+    color: var(--font-color);
 }
 #AppDiary .diaryEditor .el-textarea textarea:focus{
     border: 1px solid var(--theme-color);

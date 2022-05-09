@@ -21,7 +21,7 @@
                 <AppFooter></AppFooter>
             </div>
         </div>
-        <el-dialog class="editContainer" :title="editData.name" :visible.sync="isEdit" width="300px">
+        <el-dialog class="editContainer" :title="editData.name" :visible.sync="isEdit" width="500px">
             <el-form :model="editData">
                 <div class="item">
                     <div class="iconSelect">
@@ -51,9 +51,11 @@
                     <div class="key">分类</div> 
                     <el-input v-model="editData.listName" placeholder="分类"></el-input>
                 </div>
-                <el-button @click="deleteLink" type="danger">删除</el-button>
-                <el-button @click="saveLink" type="primary">保存</el-button>
             </el-form>
+            <div slot="footer" class="buttons">
+                <kk-button @click="deleteLink" type="danger">删除</kk-button>
+                <kk-button @click="saveLink" type="primary">保存</kk-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -63,6 +65,7 @@ import LinkNav from './Link/LinkNav.vue';
 import LinkList from './Link/LinkList.vue';
 import AppFooter from '../Layout/AppFooter.vue';
 import { mapActions, mapState } from 'vuex';
+import kkButton from '@/kk/kk-button.vue';
 
 export default {
     data(){
@@ -204,6 +207,7 @@ export default {
         LinkList,
         LinkNav,
         AppFooter,
+        kkButton,
     },
     mounted(){
         this.checkLogin();
@@ -287,19 +291,19 @@ export default {
 #AppLink .searchOrAdd .el-icon-circle-plus-outline{
     right: 0;
 }
-#AppLink .el-dialog__body{
-    padding-top: 0;
-}
+
+
 #AppLink .editContainer .el-form{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding: 1rem;
 }
 #AppLink .editContainer .el-form .el-button{
-    height: 2rem;
+    /* height: 2rem;
     line-height: 2rem;
     padding: 0 0.5rem;
-    margin: 0.5rem 0;
+    margin: 0.5rem 0; */
 }
 #AppLink .editContainer .item{
     display: flex;
@@ -307,7 +311,9 @@ export default {
     width: 100%;
 }
 #AppLink .editContainer .item .key{
-    min-width: 2rem;
+    min-width: 6rem;
+    padding: 0 1rem 0 0;
+    text-align: right;
     flex: 1;
     height: 2rem;
     line-height: 2rem;
@@ -340,8 +346,16 @@ export default {
     height: 2rem;
 }
 #AppLink .item .iconSelect{
-    width: 2rem;
+    width: 6rem;
     min-width: 2rem;
+    text-align: right;
+    padding: 0 1rem 0 0;
+}
+#AppLink .el-dialog .buttons{
+    width: 100%;
+    height: 3rem;
+    background: var(--card-inner);
+    text-align: right;
 }
 .el-dialog .option{
     width: 2rem;

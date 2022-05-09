@@ -7,7 +7,7 @@
           <LinkClickPanel></LinkClickPanel>
         </el-carousel-item>
         <el-carousel-item class="mainItem">
-          <DiaryEmoji></DiaryEmoji>
+          <task-week></task-week>
         </el-carousel-item>
       </el-carousel>
 
@@ -28,7 +28,8 @@ import { mapState } from 'vuex';
 import AppFooter from '../Layout/AppFooter.vue';
 
 import LinkClickPanel from './Panel/LinkClickPanel.vue';
-import DiaryEmoji from './Panel/DiaryEmoji.vue';
+import TaskWeek from './Panel/TaskWeek.vue';
+// import DiaryEmoji from './Panel/DiaryEmoji.vue';
 // import WeatherPanel from './Panel/WeatherPanel.vue';
 
 import Hitokoto from './Panel/Hitokoto.vue';
@@ -49,7 +50,7 @@ export default {
     BilibiliHot,
     Hitokoto,
     LinkClickPanel,
-    DiaryEmoji,
+    TaskWeek,
     WeiboHot,
     ZhihuHot,
     // WeatherPanel,

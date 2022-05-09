@@ -1,0 +1,32 @@
+
+/* element css 重写 */
+.el-input__inner{
+    background-color: var(--card-white);
+    border: 1px solid var(--card-inner);
+}
+.el-input__inner:hover{
+    border: 1px solid var(--theme-color);
+}
+
+
+.el-dialog__header,
+.el-dialog__footer{
+    background: var(--card-inner);
+}
+.el-dialog__body{
+    background-color: var(--card-white);
+}
+.el-dialog__footer{
+    padding: 16px;
+}
+.el-dialog__title,
+.el-dialog__body{
+    color: var(--font-color);
+}
+
+
+
+.el-input-number__decrease, .el-input-number__increase{
+    background: var(--card-inner);
+    border-color: var(--card-inner);
+}

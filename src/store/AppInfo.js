@@ -8,9 +8,9 @@ export default {
             let userAuth = localStorage.getItem('userAuth');
            
             var config = {
-                method: 'put',
+                method: 'get',
                 // url: `${context.state.origin}/jianguo/DoraSpace/checkLogin.data`,
-                url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol`,
+                url: `${context.state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol`,
                 headers: { 
                     'Authorization': `Basic ${userAuth}`, 
                     'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ export default {
                             path: '/Login',
                         })
                     }
-                    console.log("登录失败",response.data.data);
+                    console.log("登录失败",response.data);
                 }
             }).catch(function (error) {
                 console.log("登录失败",error)

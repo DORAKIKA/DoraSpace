@@ -38,7 +38,8 @@
                 <el-switch
                 v-model="config.customStyle"
                 active-color="var(--theme-color)"
-                inactive-color="var(--theme-color)">
+                inactive-color="var(--theme-color)"
+                @change="handleCustomStyle">
                 </el-switch>
             </div>
         </div>
@@ -54,6 +55,12 @@
             <div class="key">启用Card面板</div>
             <div class="value">
                 <el-switch v-model="config.Nav.card.show"></el-switch>
+            </div>
+        </div>
+        <div class="item">
+            <div class="key">启用Task面板</div>
+            <div class="value">
+                <el-switch v-model="config.Nav.task.show"></el-switch>
             </div>
         </div>
         <div class="item">
@@ -73,7 +80,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
     data(){
         return{
@@ -82,9 +89,10 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['config']),
+        ...mapGetters(['config','customStyle']),
     },
     methods:{
+        ...mapActions(['getCustomStyle']),
         changeThemeColor(value){
             this.config.themeColor = value;
         },
@@ -92,6 +100,9 @@ export default {
             this.$router.replace({
                 path: '/Login',
             })
+        },
+        handleCustomStyle(value){
+            if(value && !this.customStyle)this.getCustomStyle();
         }
     }
 }

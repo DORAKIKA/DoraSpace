@@ -1,46 +1,17 @@
 <template>
   <div id="CardReview">
     <div class="filterOption">
-      <div class="option-item filterCategory">
-        <el-select v-model="filterOptions.category" placeholder="分类">
-          <el-option
-            v-for="category in CardData.categories"
-            :key="category.id"
-            :value="category.id"
-            :label="category.name"
-            >
-          </el-option>
-        </el-select>
-      </div>
-      <div class="option-item filterTags">
-        <el-select placeholder="标签" v-model="filterOptions.tags" multiple collapse-tags="">
-          <el-option
-            v-for="(tag,name) in CardData.tags"
-            :key="name"
-            :label="name"
-            :value="name"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="option-item filterSearch">
-        <el-input v-model="filterOptions.search" placeholder="搜索"></el-input>
-      </div>
-      <div class="option-item filterCommit"><el-button @click="doFilter">筛选》</el-button></div>
-      <div class="option-item result">
-        <el-select placeholder="结果" v-model="cardId" @change="selectChange">
-          <el-option
-            v-for="card in filterCards"
-            :key="card.cid"
-            :label="card.title"
-            :value="card.cid"
-          >
-
-          </el-option>
-        </el-select>
-      </div>
+      <el-autocomplete
+        class="search"
+        v-model="searchValue"
+        :fetch-suggestions="querySearch"
+        placeholder="请输入内容"
+        @select="handleSelect"
+      ></el-autocomplete>
     </div>
 
-    <div class="cardRead">
+
+    <div class="cardRead" ref="card">
       <div class="meta">
         <h1 class="title">{{card.title}}</h1>
         <div class="category">{{category.name}}</div>
@@ -65,7 +36,7 @@
 
 
     <div class="next">
-      <el-button>下一篇</el-button>
+      <kk-button @click="handleNext">下一篇</kk-button>
     </div>
     <div class="related">
 
@@ -74,65 +45,62 @@
 </template>
 
 <script>
-import VditorPreview from 'vditor/dist/method.min'
 import { mapGetters } from 'vuex';
+import kkButton from '../../../kk/kk-button';
 export default {
+  components:{kkButton},
   data(){
     return {
+      searchValue: "",
       card:{content:""},
-      cardHtml: "",
-      filterOptions:{
-        category: "",
-        tags:[],
-        search:"",
-      },
-      filterCards:[],
-      cardId:""
     }
   },
   computed:{
     ...mapGetters(['CardData']),
     category(){
-      return this.CardData.categories[this.card.category] ? this.CardData.categories[this.card.category]:"";
+      return this.CardData.categories&&this.CardData.categories[this.card.category] ? this.CardData.categories[this.card.category]:"";
     },
   },
+  watch:{
+    CardData(){
+      this.switchCard()
+    }
+  },
   methods:{
-    updateToMd:async(_this)=>{
-      _this.cardHtml = await VditorPreview.md2html(_this.card.content);
+    querySearch(queryString, cb) {
+      var cards = this.CardData.cards;
+      var results = [];
+
+      for(let key in cards){
+        if(cards[key].title.indexOf(queryString) !== -1){
+          results.push({...cards[key],value:cards[key].title});
+        }
+      }
+
+      // 调用 callback 返回建议列表的数据
+      cb(results);
     },
-    doFilter(){
-      let cards = this.CardData.cards;
-      this.filterCards.length = 0;
-      for(let id in cards){
-        if(this.filterOptions.category && cards[id].category !== this.filterOptions.category){
-          continue;
-        }
-        if(this.filterOptions.tags.length){
-          let tagCheck = false;
-          for(let tag in this.filterOptions.tags){
-            if(cards[id].tags.indexOf(this.filterOptions.tags[tag]) !== -1){
-              tagCheck = true;
-            }
-          }
-          if(!tagCheck){
-            continue;
-          }
-        }
-        //筛选搜索词
-        this.filterCards.push(cards[id]);
+    handleSelect(item) {
+      console.log(item);
+      this.switchCard(item.cid)
+    },
+    switchCard(id){
+      if(!this.CardData.cards)return;
+      if(id){
+        this.card = this.CardData.cards[id];
+      }else{
+        let cids = Object.keys(this.CardData.cards);
+        let random = Math.floor(Math.random()*cids.length);
+        this.card = this.CardData.cards[cids[random]];
       }
     },
-    selectChange(){
-      this.card = this.CardData.cards[this.cardId];
-    },
-    changeRandomCard(){
-      let randomId = "c003"
-      this.card = this.CardData.cards[randomId]?this.CardData.cards[randomId]:{content:""};
-      this.updateToMd(this)
+    handleNext(){
+      this.switchCard();
+      this.$refs.card.scrollIntoView()
     }
   },
   mounted(){
-    this.changeRandomCard();
+    this.switchCard()
   }
 }
 </script>
@@ -151,14 +119,10 @@ export default {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.filterOption .option-item{
-  width: calc((100% - 4rem) / 5);
-}
-.filterOption .option-item .el-select,
-.filterOption .option-item button{
+.filterOption .search{
   width: 100%;
 }
-.filterOption .option-item input{
+.filterOption input{
   background: var(--bg);
 }
 
@@ -258,7 +222,7 @@ export default {
 }
 #AppCard .markdown-body code:not([class^="lang"]){
   background: var(--theme-color);
-  box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0.8) inset;
+  box-shadow: 0 0 0 1rem rgba(255, 255, 255, 0.9) inset;
   color: var(--theme-color);
 }
 #AppCard .markdown-body pre{
@@ -295,14 +259,6 @@ export default {
 @media screen and (max-width:900px) {
   #CardReview .cardRead{
     padding: 1rem 0;
-  }
-  .filterOption .option-item{
-    width: 100%;
-    margin: 0.2rem 0;
-  }
-  .filterOption .option-item input,
-  .filterOption .option-item button{
-    width: 100%;
   }
 }
 </style>

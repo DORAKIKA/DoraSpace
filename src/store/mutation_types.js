@@ -8,6 +8,7 @@ const types = {
     SET_LINK_DATA: 'SET_LINK_DATA', //设置Link页面所需数据
     SET_DIARY_DATA: 'SET_DIARY_DATA',   //设置Diary页面所需数据
     SET_SETTING_DATA: 'SET_SETTING_DATA',   //Setting页面所需数据
+    SET_TASK_DATA: 'SET_TASK_DATA',         //Task页面所需数据
 
 
     UPDATE_CARD_CATEGORY: 'UPDATE_CARD_CATEGORY', //更新Card分类数据

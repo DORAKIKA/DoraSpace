@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 const http = require('../../../http/index').default;
 export default {
 data(){
@@ -20,9 +21,12 @@ data(){
         data:[],
     }
 },
+computed:{
+    ...mapState(['https'])
+},
 methods:{
     refresh(){
-        http.get('http://api.dorakika.cn/weibo/hot').then(
+        http.get(`${this.https}://api.dorakika.cn/weibo/hot`).then(
             (res)=>{
                 this.data = res.data.data;
             },

@@ -3,12 +3,12 @@ export const config = {
     isDark:false,
     customStyle: false,
     Nav:{
-        panel: {id:'AppPanel',name:'Panel',icon:'iconfont icon-bodongtu',link:'/Panel',show:true},
-        card: {id:'AppCard',name:'Card',icon:'iconfont icon-cards',link:'/Card',show:true},
-        todo: {id:'AppTodo',name:'Todo',icon:'iconfont icon-fill-task',link:'/Todo',show:true},
-        link: {id:'AppLink',name:'Link',icon:'iconfont icon-link',link:'/Link',show:true},
-        diary: {id:'AppDiary',name:"Diary",icon:'iconfont icon-rili',link:'/Diary',show:true},
-        setting: {id:'AppSetting',name:'Setting',icon:'iconfont icon-shezhi',link:'/Setting',show:true},
+        panel: {id:'AppPanel',name:'面板',icon:'iconfont icon-bodongtu',link:'/Panel',show:true},
+        card: {id:'AppCard',name:'卡片',icon:'iconfont icon-cards',link:'/Card',show:true},
+        task: {id:'AppTask',name:'任务',icon:'iconfont icon-jishi',link:'/Task',show:true},
+        link: {id:'AppLink',name:'链接',icon:'iconfont icon-link',link:'/Link',show:true},
+        diary: {id:'AppDiary',name:"日记",icon:'iconfont icon-rili',link:'/Diary',show:true},
+        setting: {id:'AppSetting',name:'设置',icon:'iconfont icon-shezhi',link:'/Setting',show:true},
     },
     Panel:{
         showBilibiliHot: true,
@@ -21,8 +21,8 @@ export const config = {
     },
     Link:{
         showLinkChart: true,
-        chartLimit: 10,
-        showNav: true,
+        chartLimit: 8,
+        showNav: false,
     }
 }
 

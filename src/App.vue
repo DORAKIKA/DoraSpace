@@ -99,8 +99,8 @@ main.el-main{
     width: 2px;
     height: 2px;
 }
-  #app>.el-container{
+  /* #app>.el-container{
     flex-direction: column-reverse;
-  }
+  } */
 }
 </style>

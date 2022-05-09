@@ -40,7 +40,7 @@ export function setDarkMode(mode) {
  */
 const CONFIG_KEY = 'CONFIG_KEY';
 export function getLocalConfig(){
-  return storage.get(CONFIG_KEY,config);
+  return storage.get(CONFIG_KEY,JSON.stringify(config));
 }
 export function setLocalConfig(config){
   storage.set(CONFIG_KEY,config);

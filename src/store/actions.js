@@ -13,6 +13,23 @@ export const switchDarkMode = function({commit,state}){
     setLocalConfig(JSON.stringify(state.config));
 }
 
+//检查登录
+export const checkLogin = function({state}){
+    if(!state.isLogin) return;
+    let userAuth = localStorage.getItem('userAuth');
+    http.get(`${state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol`,{
+        headers:{
+            'Authorization': `Basic ${userAuth}`
+        }
+    }).then(res=>{
+        if(res.data.code){
+            console.log(res.data)
+        }
+    },error=>{
+        console.log(error)
+    });
+}
+
 //获取所有数据
 export const getAppData = function({commit,state}){
     if(!state.isLogin) return;
@@ -29,13 +46,14 @@ export const getAppData = function({commit,state}){
                 commit(types.SET_LINK_DATA,res.data.LINK_DATA);
                 commit(types.SET_DIARY_DATA,res.data.DIARY_DATA);
                 commit(types.SET_SETTING_DATA,res.data.SETTING_DATA);
-                // $bus.$emit('onDataLoad');
+                commit(types.SET_TASK_DATA,res.data.TASK_DATA);
             })
         }else if(res.data.code){
             commit(types.SET_CARD_DATA,res.data.data.CARD_DATA);
             commit(types.SET_LINK_DATA,res.data.data.LINK_DATA);
             commit(types.SET_DIARY_DATA,res.data.data.DIARY_DATA);
             commit(types.SET_SETTING_DATA,res.data.data.SETTING_DATA);
+            commit(types.SET_TASK_DATA,res.data.data.TASK_DATA);
             // $bus.$emit('onDataLoad');
         }
     },error=>{
@@ -50,7 +68,8 @@ export const uploadAppData = function({state}){
         CARD_DATA: state.CardData,
         LINK_DATA: state.LinkData,
         DIARY_DATA: state.DiaryData,
-        SETTING_DATA: state.SettingData
+        SETTING_DATA: state.SettingData,
+        TASK_DATA: state.TaskData,
     });
     var config = {
         method: 'put',
@@ -71,6 +90,24 @@ export const uploadAppData = function({state}){
 export const getConfig = function({commit}){
     commit(types.SET_CONFIG,JSON.parse(getLocalConfig()))
 }
+
+//获取自定义样式
+export const getCustomStyle  = function({commit,state},url){
+    if(!state.isLogin) return;
+    let userAuth = localStorage.getItem('userAuth');
+    http.get(`${state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/${url?url:'custom.css'}`,{
+        headers:{
+            'Authorization': `Basic ${userAuth}`
+        }
+    }).then(res=>{
+        if(res.data.code){
+            commit(types.SET_CUSTOM_STYLE,res.data.data);
+        }
+    },error=>{
+        console.log(error)
+    });
+}
+
 
 
 
@@ -154,16 +191,20 @@ export const deleteDiaryItem = function({commit,dispatch},value){
 
 //----task
 //添加任务历史
-export const addTaskHistory = function({commit},value){
+export const addTaskHistory = function({commit,dispatch},value){
     commit(types.ADD_TASK_HISTORY,value);
+    dispatch('uploadAppData');
 }
 //删除任务历史
-export const deleteTaskHistory = function({commit},value){
+export const deleteTaskHistory = function({commit,dispatch},value){
     commit(types.DELETE_TASK_HISTORY,value);
+    dispatch('uploadAppData');
 }
-export const addTaskPreset = function({commit},value){
+export const addTaskPreset = function({commit,dispatch},value){
     commit(types.ADD_TASK_PRESET,value);
+    dispatch('uploadAppData');
 }
-export const deleteTaskPreset = function({commit},value){
+export const deleteTaskPreset = function({commit,dispatch},value){
     commit(types.DELETE_TASK_PRESET,value);
+    dispatch('uploadAppData');
 }

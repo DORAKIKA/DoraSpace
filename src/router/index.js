@@ -69,9 +69,9 @@ export default new VueRouter({
             component: AppSetting,
         },
         {
-            path: '/Todo',
+            path: '/Task',
             component: AppTodo,
-            redirect: '/Todo/Today',
+            redirect: '/Task/Today',
             children:[
                 {
                     path: 'Today',
