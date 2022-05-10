@@ -35,9 +35,9 @@ export default {
     ...mapActions(['getAppData','getConfig'])
   },
   mounted() {
-    this.$store.dispatch('checkLogin',this);
 
     this.getConfig();
+    this.$store.dispatch('checkLogin',this);
   },
   created(){
     this.getAppData();

@@ -20,6 +20,9 @@ const mutations = {
     [types.SET_DARKMODE](state,value){
         state.config.isDark = value;
     },
+    [types.SET_LOGINMODE](state,value){
+        state.config.loginMode = value;
+    },
 
     //设置Card数据
     [types.SET_CARD_DATA](state,value){

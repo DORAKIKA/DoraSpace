@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
     data(){
         return {
@@ -18,9 +19,15 @@ export default {
         }
     },
     methods:{
+      ...mapActions(['setLoginMode']),
         userLogin(){
             //setLocalStorge
             let userAuth = btoa(encodeURIComponent(`${this.username}:${this.password}`).replace(/%([0-9A-F]{2})/g, function(match, p1) {return String.fromCharCode('0x' + p1);}));
+            if(this.username=='local'){
+              this.setLoginMode("local");
+            }else{
+              this.setLoginMode("jianguo")
+            }
             localStorage.setItem('userAuth',userAuth)
             this.$store.dispatch('checkLogin',this);
         },

@@ -7,6 +7,8 @@ export const isLogin = state => state.isLogin;
 //自定义样式
 export const customStyle = state => state.customStyle;
 
+//登录模式
+export const loginMode = state => state.loginMode;
 
 
 //DIARY INFO

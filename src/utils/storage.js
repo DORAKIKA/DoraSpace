@@ -1,4 +1,4 @@
-import {config} from '@/config'
+import {config,localData} from '@/config'
 
 
 const _storage = window.localStorage
@@ -57,4 +57,17 @@ export function getTaskTimer(){
 export function setTaskTimer(TaskTimer){
   storage.set(TASK_KEY,TaskTimer);
   return TaskTimer;
+}
+
+
+
+/**
+ * LocalData
+ */
+const LOCALDATA_KEY = 'LOCALDATA_KEY';
+export function getLcoalData(){
+  return JSON.parse(storage.get(LOCALDATA_KEY,JSON.stringify(localData)));
+}
+export function setLocalData(data){
+  storage.set(LOCALDATA_KEY,JSON.stringify(data));
 }

@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-import AppInfo from './AppInfo';
+// import AppInfo from './AppInfo';
 
 import state from './state';
 import * as actions from './actions'
@@ -19,6 +19,6 @@ export default new Vuex.Store({
     getters,
     mutations,
     modules:{
-        AppInfo,
+        // AppInfo,
     }
 });

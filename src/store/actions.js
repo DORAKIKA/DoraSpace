@@ -1,7 +1,12 @@
 import types from './mutation_types';
 import http from '@/http/index';
 import axios from '@/utils/axios';
-import { getLocalConfig,setLocalConfig } from '@/utils/storage';
+import { 
+    getLocalConfig,
+    setLocalConfig,
+    setLocalData,
+    getLcoalData,
+} from '@/utils/storage';
  
 // 设置用户配置
 export const setDarkMode = function({ commit }, { config }) {
@@ -14,25 +19,88 @@ export const switchDarkMode = function({commit,state}){
 }
 
 //检查登录
-export const checkLogin = function({state}){
-    if(!state.isLogin) return;
+export const checkLogin = function({dispatch,state},app){
+    //检查登录
     let userAuth = localStorage.getItem('userAuth');
-    http.get(`${state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol`,{
-        headers:{
-            'Authorization': `Basic ${userAuth}`
+    if(state.config.loginMode=="local"){
+        app.$message({
+            showClose: true,
+            message: '登录成功',
+            type: 'success'
+        });
+        state.isLogin = true;
+        dispatch("getAppData");
+        if(app.$router.currentRoute.path === '/Login' || app.$router.currentRoute.path === '/'){
+            app.$router.replace({
+                path: '/Panel',
+            })
         }
-    }).then(res=>{
-        if(res.data.code){
-            console.log(res.data)
+        return;
+    }
+    var config = {
+        method: 'get',
+        // url: `${context.state.origin}/jianguo/DoraSpace/checkLogin.data`,
+        url: `${state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace&method=mkcol`,
+        headers: { 
+            'Authorization': `Basic ${userAuth}`, 
+            'Content-Type': 'application/json'
+        },
+    };
+    axios(config).then((response)=>{
+        console.log(response)
+        if(response.data.status === 1){
+            state.isLogin = true;
+            
+            app.$message({
+                showClose: true,
+                message: '登录成功',
+                type: 'success'
+            });
+            if(app.$router.currentRoute.path === '/Login' || app.$router.currentRoute.path === '/'){
+                app.$router.replace({
+                    path: '/Panel',
+                })
+            }
+            dispatch("getAppData");
+        }else if(response.data.status === 0){
+            state.isLogin = false;
+            
+            app.$message({
+                showClose: true,
+                message: '用户名或密码错误！',
+                type: 'error'
+            });
+            if(app.$router.currentRoute.path !== '/Login'){
+                app.$router.replace({
+                    path: '/Login',
+                })
+            }
+            console.log("登录失败",response.data);
         }
-    },error=>{
-        console.log(error)
+    }).catch(function (error) {
+        console.log("登录失败",error)
     });
+    return false;
+}
+export const setLoginMode = function({commit,state},value){
+    commit(types.SET_LOGINMODE,value);
+    setLocalConfig(JSON.stringify(state.config));
 }
 
 //获取所有数据
 export const getAppData = function({commit,state}){
     if(!state.isLogin) return;
+    if(state.config.loginMode === 'local'){
+        let data = getLcoalData();
+        commit(types.SET_CARD_DATA,data.CARD_DATA);
+        commit(types.SET_LINK_DATA,data.LINK_DATA);
+        commit(types.SET_DIARY_DATA,data.DIARY_DATA);
+        commit(types.SET_SETTING_DATA,data.SETTING_DATA);
+        commit(types.SET_TASK_DATA,data.TASK_DATA);
+        return;
+    }
+
+
     let userAuth = localStorage.getItem('userAuth');
     http.get(`${state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/AppData.json`,{
         headers:{
@@ -48,7 +116,8 @@ export const getAppData = function({commit,state}){
                 commit(types.SET_SETTING_DATA,res.data.SETTING_DATA);
                 commit(types.SET_TASK_DATA,res.data.TASK_DATA);
             })
-        }else if(res.data.code){
+        }else if(res.data.code<400){
+            console.log(res.data)
             commit(types.SET_CARD_DATA,res.data.data.CARD_DATA);
             commit(types.SET_LINK_DATA,res.data.data.LINK_DATA);
             commit(types.SET_DIARY_DATA,res.data.data.DIARY_DATA);
@@ -63,14 +132,23 @@ export const getAppData = function({commit,state}){
 //上传所有数据--
 export const uploadAppData = function({state}){
     if(!state.isLogin) return;
+
     let userAuth = localStorage.getItem('userAuth');
-    var data = JSON.stringify({
+    var data = {
         CARD_DATA: state.CardData,
         LINK_DATA: state.LinkData,
         DIARY_DATA: state.DiaryData,
         SETTING_DATA: state.SettingData,
         TASK_DATA: state.TaskData,
-    });
+    };
+
+
+    if(state.config.loginMode === 'local'){
+        setLocalData(data);
+        return;
+    }
+
+    data = JSON.stringify(data);
     var config = {
         method: 'put',
         url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/AppData.json`,
