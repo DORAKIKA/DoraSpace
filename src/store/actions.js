@@ -151,7 +151,7 @@ export const uploadAppData = function({state}){
     data = JSON.stringify(data);
     var config = {
         method: 'put',
-        url: `${this.state.AppInfo.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/AppData.json`,
+        url: `${state.https}://api.dorakika.cn/jianguoyun?target=DoraSpace/AppData.json`,
         headers: { 
             'Authorization': `Basic ${userAuth}`, 
             'Content-Type': 'application/json'

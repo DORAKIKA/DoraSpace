@@ -166,6 +166,7 @@ export default {
             ? this.TaskTimer.startTime + this.currentDoing.onceTime
             : now;
       let nowTime = this.getTimeText(true);
+
       if(now - this.TaskTimer.startTime < 60000){
         await this.$confirm(`当前时长为${nowTime}，不足1min，将不计入历史记录，是否停止？`,"提示",{
           confirmButtonText: '停止',
@@ -250,6 +251,9 @@ export default {
     getTimeText(pure=false){
       let now = new Date().getTime();
       let progress = now - this.TaskTimer.startTime;
+      progress = progress > this.TaskData.history[this.TaskTimer.taskId].onceTime ? 
+                this.TaskData.history[this.TaskTimer.taskId].onceTime : 
+                progress;
       if(!pure)progress = this.TaskData.history[this.TaskTimer.taskId].onceTime - progress;
       let min = (((progress / 1000)<<0) / 60)<<0;
       min  = min >= 0 ? min : 0;
