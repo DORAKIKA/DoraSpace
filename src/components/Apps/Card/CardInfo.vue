@@ -227,6 +227,7 @@ export default {
 }
 #cardInfo .meta{
     border-radius: 8px;
+    margin-top: 1rem;
 }
 #cardInfo .meta .metaItem{
     display: flex;

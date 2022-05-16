@@ -5,7 +5,7 @@
         <div class="item">
             <div class="key">表情设置（英文逗号分隔）</div>
             <div class="value">
-                <el-input v-model="diaryEmojis"></el-input>
+                <el-input v-model="DiaryData.emojis"></el-input>
             </div>
         </div>
     </div>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   computed:{
-    ...mapGetters(['diaryEmojis'])
+    ...mapState(['DiaryData'])
   }
 }
 </script>
